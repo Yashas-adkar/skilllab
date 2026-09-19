@@ -10,6 +10,7 @@ import {
   ScoreRecord,
   EvaluationReport,
 } from '@/types/workflow.types';
+import { InterviewTurn } from '@/types/interview-chat.types';
 
 const STORAGE_KEYS = {
   SESSIONS: 'skilllab_sessions_v1',
@@ -17,6 +18,7 @@ const STORAGE_KEYS = {
   ANSWERS: 'skilllab_answers_v1',
   SCORES: 'skilllab_scores_v1',
   EVALUATIONS: 'skilllab_evaluations_v1',
+  INTERVIEW_TURNS: 'skilllab_interview_turns_v1',
 };
 
 // Local storage helpers for offline/demo resilience
@@ -288,6 +290,32 @@ export class WorkflowRepository {
   static async getEvaluation(sessionId: string): Promise<EvaluationReport | null> {
     const map = getLocalStorageMap<EvaluationReport>(STORAGE_KEYS.EVALUATIONS);
     return map[sessionId] || null;
+  }
+
+  /**
+   * Save interview conversational turn
+   */
+  static async saveInterviewTurn(turn: InterviewTurn): Promise<void> {
+    const key = `${turn.sessionId}_${turn.id}`;
+    setLocalStorageItem(STORAGE_KEYS.INTERVIEW_TURNS, key, turn);
+
+    if (isFirebaseConfigured && db) {
+      try {
+        await setDoc(doc(db, 'interview_turns', key), turn);
+      } catch (e) {
+        console.warn('Firestore interview turn save fallback', e);
+      }
+    }
+  }
+
+  /**
+   * Get all conversation turns for a session
+   */
+  static async getInterviewTurns(sessionId: string): Promise<InterviewTurn[]> {
+    const map = getLocalStorageMap<InterviewTurn>(STORAGE_KEYS.INTERVIEW_TURNS);
+    return Object.values(map)
+      .filter((t) => t.sessionId === sessionId)
+      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
   }
 
   /**
