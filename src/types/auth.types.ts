@@ -37,6 +37,7 @@ export interface UserProfile {
   skills: string[];
   education: EducationInfo;
   interviewProgress: InterviewProgress;
+  resumeUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
