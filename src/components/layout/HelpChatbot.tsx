@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { MessageCircle, X, Send, Bot, Sparkles, Loader2 } from 'lucide-react';
 
 interface ChatMessage {
@@ -10,6 +11,7 @@ interface ChatMessage {
 }
 
 export function HelpChatbot() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -55,11 +57,20 @@ export function HelpChatbot() {
     setInputText('');
     setIsTyping(true);
 
+    const recentHistory = messages.slice(-6).map((m) => ({
+      sender: m.sender,
+      text: m.text,
+    }));
+
     try {
       const res = await fetch('/api/help/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: query }),
+        body: JSON.stringify({
+          message: query,
+          pathname,
+          history: recentHistory,
+        }),
       });
 
       if (res.ok) {
@@ -67,14 +78,16 @@ export function HelpChatbot() {
         const botMsg: ChatMessage = {
           id: `bot_${Date.now()}`,
           sender: 'bot',
-          text: data.reply || "I'm not sure about that. Try asking me how to use the Resume, Aptitude, Coding, AI Interview, Results, Profile, or Settings sections.",
+          text:
+            data.reply ||
+            "I'm having trouble responding right now. Please try again in a moment.",
         };
         setMessages((prev) => [...prev, botMsg]);
       } else {
         const botMsg: ChatMessage = {
           id: `bot_${Date.now()}`,
           sender: 'bot',
-          text: "I'm not sure about that. Try asking me how to use the Resume, Aptitude, Coding, AI Interview, Results, Profile, or Settings sections.",
+          text: "I'm having trouble responding right now. Please try again in a moment.",
         };
         setMessages((prev) => [...prev, botMsg]);
       }
@@ -82,7 +95,7 @@ export function HelpChatbot() {
       const botMsg: ChatMessage = {
         id: `bot_${Date.now()}`,
         sender: 'bot',
-        text: "I'm having trouble connecting right now. Try asking again in a moment.",
+        text: "I'm having trouble responding right now. Please try again in a moment.",
       };
       setMessages((prev) => [...prev, botMsg]);
     } finally {

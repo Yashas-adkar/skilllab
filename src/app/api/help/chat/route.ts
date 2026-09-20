@@ -4,7 +4,7 @@ import { HelpChatbotService } from '@/services/ai/help-chatbot.service';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { message = '' } = body;
+    const { message = '', pathname = '', history = [] } = body;
 
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
       return NextResponse.json(
@@ -13,14 +13,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const reply = await HelpChatbotService.getHelpResponse(message);
+    const reply = await HelpChatbotService.getHelpResponse({
+      message,
+      pathname,
+      history,
+    });
 
     return NextResponse.json({ reply });
   } catch (error) {
     console.error('Help chatbot route error:', error);
     return NextResponse.json({
       reply:
-        "I'm not sure about that. Try asking me how to use the Resume, Aptitude, Coding, AI Interview, Results, Profile, or Settings sections.",
+        "I'm having trouble responding right now. Please try again in a moment.",
     });
   }
 }
