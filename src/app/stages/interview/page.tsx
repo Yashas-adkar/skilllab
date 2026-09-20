@@ -327,13 +327,13 @@ export default function MockInterviewStagePage() {
   if (accessAllowed === false) {
     return (
       <AuthGuard requireCompletedProfile={true}>
-        <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4">
           <Card className="max-w-md w-full text-center space-y-4 p-8">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 dark:text-amber-400 flex items-center justify-center mx-auto">
               <AlertCircle className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold text-white">Stage Locked</h2>
-            <p className="text-sm text-slate-400 leading-relaxed">{accessReason}</p>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Stage Locked</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{accessReason}</p>
             <Button
               variant="primary"
               size="md"
@@ -350,7 +350,7 @@ export default function MockInterviewStagePage() {
 
   return (
     <AuthGuard requireCompletedProfile={true}>
-      <div className="min-h-screen bg-slate-950 flex flex-col">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col">
         <StageHeader
           currentStageId="interview"
           stageNumber={4}
@@ -363,7 +363,7 @@ export default function MockInterviewStagePage() {
 
         <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 space-y-5 flex-1 flex flex-col">
           {/* Top Session Control Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-slate-900/80 border border-slate-800 rounded-2xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
             {/* Left: Avatar & Interviewer Info */}
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -374,14 +374,14 @@ export default function MockInterviewStagePage() {
                 >
                   <Bot className="w-6 h-6" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-slate-950" />
+                <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-950" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-sm font-bold text-white">Dr. Elena Vance</h2>
-                  <Badge variant="indigo" size="sm">AI Principal Evaluator</Badge>
+                  <h2 className="text-sm font-bold text-slate-900 dark:text-white">Dr. Elena Vance</h2>
+                  <Badge variant="blue" size="sm">AI Principal Evaluator</Badge>
                 </div>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-600 dark:text-slate-400">
                   {stream.name} • {profile?.profileInformation?.headline || stream.shortName}
                 </p>
               </div>
@@ -390,14 +390,14 @@ export default function MockInterviewStagePage() {
             {/* Right: Controls (Mode Toggle, Timer, Conclude) */}
             <div className="flex flex-wrap items-center gap-3">
               {/* Mode Switcher */}
-              <div className="flex items-center bg-slate-950 border border-slate-800 rounded-xl p-1 text-xs">
+              <div className="flex items-center bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-1 text-xs">
                 <button
                   type="button"
                   onClick={() => setMode('text')}
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
                     mode === 'text'
                       ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'text-slate-400 hover:text-slate-200'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   <MessageSquare className="w-3.5 h-3.5" />
@@ -409,7 +409,7 @@ export default function MockInterviewStagePage() {
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
                     mode === 'voice'
                       ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'text-slate-400 hover:text-slate-200'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
                   <Mic className="w-3.5 h-3.5" />
@@ -418,8 +418,8 @@ export default function MockInterviewStagePage() {
               </div>
 
               {/* Timer */}
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-mono font-bold">
-                <Clock className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-bold">
+                <Clock className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 animate-pulse" />
                 <span>{formatTimer(timeLeft)}</span>
               </div>
 
@@ -437,14 +437,14 @@ export default function MockInterviewStagePage() {
           </div>
 
           {/* Phase Progress Bar */}
-          <div className="p-3 bg-slate-900/50 border border-slate-800/80 rounded-xl space-y-1.5">
+          <div className="p-3 bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800/80 rounded-xl space-y-1.5 shadow-sm">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-indigo-300">
+              <span className="font-semibold text-indigo-700 dark:text-indigo-300">
                 Phase {currentPhase} of 8: {INTERVIEW_PHASE_NAMES[currentPhase]}
               </span>
-              <span className="text-slate-400">{Math.round((currentPhase / 8) * 100)}% complete</span>
+              <span className="text-slate-500 dark:text-slate-400">{Math.round((currentPhase / 8) * 100)}% complete</span>
             </div>
-            <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+            <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
               <div
                 className="bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400 h-full transition-all duration-500"
                 style={{ width: `${(currentPhase / 8) * 100}%` }}
@@ -454,16 +454,16 @@ export default function MockInterviewStagePage() {
 
           {/* ACTIVE QUESTION BANNER */}
           {latestAiMessage && (
-            <div className="p-4 bg-gradient-to-r from-indigo-950/40 via-slate-900 to-slate-900 border border-indigo-500/30 rounded-2xl flex items-start justify-between gap-4">
+            <div className="p-4 bg-indigo-50/70 dark:bg-slate-900 border border-indigo-200 dark:border-indigo-500/30 rounded-2xl flex items-start justify-between gap-4 shadow-sm">
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 shrink-0 mt-0.5">
+                <div className="p-2 rounded-xl bg-indigo-100 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5">
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div className="space-y-1 text-xs sm:text-sm">
-                  <span className="font-bold text-indigo-300 uppercase tracking-wider text-[10px]">
+                  <span className="font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider text-[10px]">
                     Active Interview Prompt • {latestAiMessage.phaseName || `Phase ${currentPhase}`}
                   </span>
-                  <p className="text-white font-medium leading-relaxed">
+                  <p className="text-slate-900 dark:text-white font-medium leading-relaxed">
                     {latestAiMessage.text}
                   </p>
                 </div>
@@ -472,10 +472,10 @@ export default function MockInterviewStagePage() {
               <button
                 type="button"
                 onClick={() => speakText(latestAiMessage.text)}
-                className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors shrink-0 cursor-pointer"
+                className="p-2 rounded-xl bg-white dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-transparent transition-colors shrink-0 cursor-pointer"
                 title="Replay Audio"
               >
-                <Volume2 className="w-4 h-4 text-indigo-400" />
+                <Volume2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               </button>
             </div>
           )}
@@ -491,7 +491,7 @@ export default function MockInterviewStagePage() {
                     className={`flex items-start gap-3 ${isAi ? 'justify-start' : 'justify-end'}`}
                   >
                     {isAi && (
-                      <div className="w-8 h-8 rounded-lg bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 flex items-center justify-center shrink-0 mt-1">
+                      <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-600/30 border border-indigo-200 dark:border-indigo-500/40 text-indigo-700 dark:text-indigo-300 flex items-center justify-center shrink-0 mt-1">
                         <Bot className="w-4 h-4" />
                       </div>
                     )}
@@ -499,7 +499,7 @@ export default function MockInterviewStagePage() {
                     <div
                       className={`max-w-xl rounded-2xl p-4 text-xs sm:text-sm space-y-2 shadow-sm leading-relaxed ${
                         isAi
-                          ? 'bg-slate-900 border border-slate-800 text-slate-200'
+                          ? 'bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200'
                           : 'bg-indigo-600 text-white shadow-indigo-600/20'
                       }`}
                     >
@@ -514,11 +514,11 @@ export default function MockInterviewStagePage() {
 
                       {/* Evaluation Pill if turn was evaluated */}
                       {m.evaluation && (
-                        <div className="pt-2 mt-2 border-t border-indigo-500/30 text-[11px] flex items-center gap-3">
-                          <span className="text-emerald-300">
+                        <div className="pt-2 mt-2 border-t border-slate-200 dark:border-indigo-500/30 text-[11px] flex items-center gap-3">
+                          <span className="text-emerald-700 dark:text-emerald-300">
                             Depth: <strong>{m.evaluation.technicalDepthScore}%</strong>
                           </span>
-                          <span className="text-cyan-200">
+                          <span className="text-cyan-700 dark:text-cyan-200">
                             Clarity: <strong>{m.evaluation.clarityScore}%</strong>
                           </span>
                         </div>
@@ -526,7 +526,7 @@ export default function MockInterviewStagePage() {
                     </div>
 
                     {!isAi && (
-                      <div className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 flex items-center justify-center shrink-0 mt-1">
+                      <div className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 flex items-center justify-center shrink-0 mt-1">
                         <UserIcon className="w-4 h-4" />
                       </div>
                     )}
@@ -535,12 +535,12 @@ export default function MockInterviewStagePage() {
               })}
 
               {isAiResponding && (
-                <div className="flex items-center gap-3 text-slate-400 text-xs animate-fadeIn">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 flex items-center justify-center shrink-0">
+                <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400 text-xs animate-fadeIn">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-600/30 border border-indigo-200 dark:border-indigo-500/40 text-indigo-700 dark:text-indigo-300 flex items-center justify-center shrink-0">
                     <Bot className="w-4 h-4" />
                   </div>
-                  <div className="p-3 bg-slate-900 border border-slate-800 rounded-2xl flex items-center gap-2">
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-400" />
+                  <div className="p-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-600 dark:text-indigo-400" />
                     <span>Dr. Elena Vance is evaluating your response and preparing the next question...</span>
                   </div>
                 </div>
@@ -552,7 +552,7 @@ export default function MockInterviewStagePage() {
             {/* INPUT BAR (Text & Voice) */}
             <form
               onSubmit={handleSendMessage}
-              className="pt-3 border-t border-slate-800 flex items-center gap-2"
+              className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center gap-2"
             >
               {/* Voice Microphone Toggle */}
               <button
@@ -560,8 +560,8 @@ export default function MockInterviewStagePage() {
                 onClick={toggleListening}
                 className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-center shrink-0 ${
                   isListening
-                    ? 'bg-red-500/20 border-red-500 text-red-400 animate-pulse'
-                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                    ? 'bg-red-500/20 border-red-500 text-red-500 dark:text-red-400 animate-pulse'
+                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700'
                 }`}
                 title={isListening ? 'Listening... click to stop' : 'Click to speak answer'}
               >
@@ -579,7 +579,7 @@ export default function MockInterviewStagePage() {
                     ? 'Listening... speech is transcribing to text automatically...'
                     : 'Type your technical answer here and press Enter...'
                 }
-                className="flex-1 bg-slate-900/90 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-100 placeholder:text-slate-500 rounded-xl px-4 py-3 text-sm outline-none transition-all disabled:opacity-50"
+                className="flex-1 bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl px-4 py-3 text-sm outline-none transition-all disabled:opacity-50"
               />
 
               {/* Send Button */}

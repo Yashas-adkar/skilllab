@@ -124,25 +124,25 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center px-4 py-12 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-slate-950">
+    <div className="flex-1 flex items-center justify-center px-4 py-12 bg-slate-50 dark:bg-slate-950 transition-colors">
       <div className="w-full max-w-md space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-violet-500 text-white shadow-lg shadow-indigo-500/20 mb-2">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-600 text-white shadow-sm mb-2">
             <Sparkles className="w-6 h-6" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Create your account</h1>
-          <p className="text-sm text-slate-400">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Create your account</h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             Start your AI-powered technical interview preparation
           </p>
         </div>
 
         {/* Card Container */}
-        <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl shadow-indigo-500/5 space-y-6">
+        <div className="bg-white dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm dark:shadow-2xl space-y-6">
           {/* Global Auth Error Alert */}
           {authError && (
-            <div className="p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-2.5 text-sm text-red-400 animate-fadeIn">
-              <AlertCircle className="w-5 h-5 shrink-0 text-red-400 mt-0.5" />
+            <div className="p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-2.5 text-sm text-red-600 dark:text-red-400 animate-fadeIn">
+              <AlertCircle className="w-5 h-5 shrink-0 text-red-600 dark:text-red-400 mt-0.5" />
               <div className="flex-1 text-xs sm:text-sm">{authError}</div>
             </div>
           )}
@@ -157,8 +157,8 @@ export default function SignUpPage() {
 
           {/* Divider */}
           <div className="relative flex items-center justify-center">
-            <div className="w-full border-t border-slate-800" />
-            <span className="absolute bg-slate-900 px-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
+            <div className="w-full border-t border-slate-200 dark:border-slate-800" />
+            <span className="absolute bg-white dark:bg-slate-900 px-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
               Or register with email
             </span>
           </div>
@@ -235,12 +235,12 @@ export default function SignUpPage() {
               rightElement={
                 <div className="flex items-center gap-1">
                   {formData.confirmPassword && formData.password === formData.confirmPassword && (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 mr-1" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mr-1" />
                   )}
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="hover:text-slate-200 p-1 focus:outline-none cursor-pointer"
+                    className="hover:text-slate-900 dark:hover:text-slate-200 p-1 focus:outline-none cursor-pointer text-slate-400"
                     aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                   >
                     {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -266,12 +266,12 @@ export default function SignUpPage() {
           </form>
 
           {/* Footer Terms & Sign In Link */}
-          <div className="pt-2 text-center text-xs text-slate-400 space-y-3">
+          <div className="pt-2 text-center text-xs text-slate-600 dark:text-slate-400 space-y-3">
             <p>
               Already have an account?{' '}
               <Link
                 href="/login"
-                className="font-medium text-indigo-400 hover:text-indigo-300 underline underline-offset-4"
+                className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 underline underline-offset-4"
               >
                 Sign In
               </Link>

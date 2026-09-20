@@ -92,19 +92,19 @@ export default function FinalEvaluationPage() {
 
   return (
     <AuthGuard requireCompletedProfile={true}>
-      <div className="min-h-screen bg-slate-950 flex flex-col">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col">
         {/* Header */}
-        <div className="w-full bg-slate-950/80 border-b border-slate-800/80 backdrop-blur-md sticky top-16 z-30 py-4 px-4 sm:px-6 lg:px-8">
+        <div className="w-full bg-white/80 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800/80 backdrop-blur-md sticky top-16 z-30 py-4 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
                 <Award className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
                   Comprehensive Evaluation
                 </span>
-                <h1 className="text-lg sm:text-xl font-bold text-white">
+                <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
                   Interview Readiness Report
                 </h1>
               </div>
@@ -123,11 +123,11 @@ export default function FinalEvaluationPage() {
 
         <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           {/* Top Score Banner */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950/50 to-slate-900 border border-slate-800 p-6 sm:p-10 shadow-2xl">
+          <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-10 shadow-sm">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
               <div className="space-y-3 max-w-xl">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="indigo" size="sm">
+                  <Badge variant="blue" size="sm">
                     {stream.name}
                   </Badge>
                   <Badge variant="emerald" size="sm">
@@ -135,32 +135,32 @@ export default function FinalEvaluationPage() {
                   </Badge>
                 </div>
 
-                <h2 className="text-3xl font-extrabold text-white tracking-tight">
+                <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                   Congratulations, {user?.displayName || 'Candidate'}!
                 </h2>
-                <p className="text-sm text-slate-300 leading-relaxed">
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                   You have successfully completed all 4 stages of technical interview preparation. Below is your comprehensive assessment breakdown, strengths analysis, and target growth areas.
                 </p>
               </div>
 
               {/* Overall Score Circle Card */}
-              <div className="flex items-center gap-6 p-6 bg-slate-950/70 border border-slate-800/80 rounded-2xl shrink-0">
+              <div className="flex items-center gap-6 p-6 bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 rounded-2xl shrink-0">
                 <div className="text-center">
-                  <div className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-indigo-600 dark:text-indigo-400">
                     {evaluation?.overallScore ?? 86}%
                   </div>
-                  <span className="text-xs text-slate-400 font-medium mt-1 block">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1 block">
                     Overall Readiness
                   </span>
                 </div>
 
-                <div className="h-12 w-[1px] bg-slate-800" />
+                <div className="h-12 w-[1px] bg-slate-200 dark:bg-slate-800" />
 
                 <div className="text-center">
-                  <div className="text-3xl sm:text-4xl font-extrabold text-emerald-400">
+                  <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600 dark:text-emerald-400">
                     {evaluation?.preparationPercentage ?? 100}%
                   </div>
-                  <span className="text-xs text-slate-400 font-medium mt-1 block">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1 block">
                     Pipeline Complete
                   </span>
                 </div>
@@ -170,8 +170,8 @@ export default function FinalEvaluationPage() {
 
           {/* 4 STAGE SCORE BREAKDOWN CARDS */}
           <div className="space-y-3">
-            <h3 className="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-              <Target className="w-5 h-5 text-indigo-400" />
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+              <Target className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               <span>Stage-by-Stage Performance Breakdown</span>
             </h3>
 
@@ -179,68 +179,68 @@ export default function FinalEvaluationPage() {
               {/* Stage 1 */}
               <Card className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                     <FileText className="w-4 h-4" />
                   </div>
                   <Badge variant="emerald" size="sm">Passed</Badge>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-400 font-medium">Stage 1: Resume Analysis</span>
-                  <div className="text-2xl font-bold text-white mt-0.5">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Stage 1: Resume Analysis</span>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
                     {evaluation?.stageScores.resume ?? 84}%
                   </div>
-                  <span className="text-[11px] text-slate-500">ATS Keyword & Impact Alignment</span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">ATS Keyword & Impact Alignment</span>
                 </div>
               </Card>
 
               {/* Stage 2 */}
               <Card className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-8 h-8 rounded-lg bg-violet-500/10 text-violet-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-violet-500/10 text-purple-600 dark:text-violet-400 flex items-center justify-center">
                     <Brain className="w-4 h-4" />
                   </div>
                   <Badge variant="emerald" size="sm">Passed</Badge>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-400 font-medium">Stage 2: Aptitude Test</span>
-                  <div className="text-2xl font-bold text-white mt-0.5">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Stage 2: Aptitude Test</span>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
                     {evaluation?.stageScores.aptitude ?? 75}%
                   </div>
-                  <span className="text-[11px] text-slate-500">Analytical & Logic Efficiency</span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">Analytical & Logic Efficiency</span>
                 </div>
               </Card>
 
               {/* Stage 3 */}
               <Card className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
                     <Code className="w-4 h-4" />
                   </div>
                   <Badge variant="emerald" size="sm">Passed</Badge>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-400 font-medium">Stage 3: Coding Assessment</span>
-                  <div className="text-2xl font-bold text-white mt-0.5">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Stage 3: Coding Assessment</span>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
                     {evaluation?.stageScores.coding ?? 90}%
                   </div>
-                  <span className="text-[11px] text-slate-500">Complexity & Test Cases Passed</span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">Complexity & Test Cases Passed</span>
                 </div>
               </Card>
 
               {/* Stage 4 */}
               <Card className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                     <Mic className="w-4 h-4" />
                   </div>
                   <Badge variant="emerald" size="sm">Passed</Badge>
                 </div>
                 <div>
-                  <span className="text-xs text-slate-400 font-medium">Stage 4: AI Mock Interview</span>
-                  <div className="text-2xl font-bold text-white mt-0.5">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Stage 4: AI Mock Interview</span>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
                     {evaluation?.stageScores.interview ?? 88}%
                   </div>
-                  <span className="text-[11px] text-slate-500">System Design & Communication</span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">System Design & Communication</span>
                 </div>
               </Card>
             </div>
@@ -250,14 +250,14 @@ export default function FinalEvaluationPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Strengths */}
             <Card className="space-y-4">
-              <div className="flex items-center gap-2 text-emerald-400 font-semibold text-sm">
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold text-sm">
                 <CheckCircle2 className="w-5 h-5" />
                 <span>Identified Core Strengths</span>
               </div>
-              <ul className="space-y-3 text-xs sm:text-sm text-slate-300">
+              <ul className="space-y-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
                 {evaluation?.strengths.map((str, i) => (
                   <li key={i} className="flex items-start gap-2.5">
-                    <span className="text-emerald-400 font-bold mt-0.5">✓</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold mt-0.5">✓</span>
                     <span className="leading-relaxed">{str}</span>
                   </li>
                 ))}
@@ -266,14 +266,14 @@ export default function FinalEvaluationPage() {
 
             {/* Weaknesses */}
             <Card className="space-y-4">
-              <div className="flex items-center gap-2 text-amber-400 font-semibold text-sm">
+              <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-semibold text-sm">
                 <AlertTriangle className="w-5 h-5" />
                 <span>Identified Weaknesses & Growth Areas</span>
               </div>
-              <ul className="space-y-3 text-xs sm:text-sm text-slate-300">
+              <ul className="space-y-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
                 {evaluation?.weaknesses.map((weak, i) => (
                   <li key={i} className="flex items-start gap-2.5">
-                    <span className="text-amber-400 font-bold mt-0.5">!</span>
+                    <span className="text-amber-600 dark:text-amber-400 font-bold mt-0.5">!</span>
                     <span className="leading-relaxed">{weak}</span>
                   </li>
                 ))}
@@ -282,8 +282,8 @@ export default function FinalEvaluationPage() {
           </div>
 
           {/* ACTIONABLE RECOMMENDATIONS */}
-          <Card className="space-y-4 border-indigo-500/30">
-            <div className="flex items-center gap-2 text-indigo-400 font-semibold text-sm">
+          <Card className="space-y-4 border-indigo-200 dark:border-indigo-500/30">
+            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold text-sm">
               <TrendingUp className="w-5 h-5" />
               <span>Recommended Next Steps & Action Plan</span>
             </div>
@@ -291,19 +291,19 @@ export default function FinalEvaluationPage() {
               {evaluation?.recommendations.map((rec, i) => (
                 <div
                   key={i}
-                  className="p-4 bg-slate-950/70 border border-slate-800 rounded-xl space-y-1.5"
+                  className="p-4 bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 rounded-xl space-y-1.5"
                 >
-                  <span className="text-xs font-bold text-indigo-400 uppercase">
+                  <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase">
                     Step {i + 1}
                   </span>
-                  <p className="text-slate-300 text-xs leading-relaxed">{rec}</p>
+                  <p className="text-slate-700 dark:text-slate-300 text-xs leading-relaxed">{rec}</p>
                 </div>
               ))}
             </div>
           </Card>
 
           {/* FOOTER ACTIONS */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-800">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
             <Button
               variant="outline"
               size="md"

@@ -23,7 +23,7 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const redirectTarget = searchParams.get('redirect') || '/dashboard';
 
-  const { signInWithEmail, signInWithGoogle, profile, error: authError, clearError, isDemoMode } = useAuth();
+  const { signInWithEmail, signInWithGoogle, error: authError, clearError, isDemoMode } = useAuth();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -66,14 +66,6 @@ function LoginForm() {
     }
   };
 
-  const navigateAfterAuth = (userProfile: typeof profile) => {
-    if (!userProfile?.selectedCareerStream) {
-      router.push('/profile?setup=required');
-    } else {
-      router.push(redirectTarget);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
@@ -84,8 +76,7 @@ function LoginForm() {
         email: formData.email,
         password: formData.password,
       });
-      // Will navigate in effect or next tick
-      router.push('/dashboard');
+      router.push(redirectTarget);
     } catch {
       // AuthContext handles error display
     } finally {
@@ -98,15 +89,14 @@ function LoginForm() {
     clearError();
     try {
       await signInWithGoogle();
-      router.push('/dashboard');
+      router.push(redirectTarget);
     } catch {
-      // AuthContext handles error display
+      // Handled by AuthContext error state
     } finally {
       setIsGoogleSubmitting(false);
     }
   };
 
-  // One-click demo filler for fast evaluation
   const handleDemoFill = () => {
     setFormData({
       email: 'alex.chen@example.com',
@@ -119,21 +109,21 @@ function LoginForm() {
     <div className="w-full max-w-md space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-violet-500 text-white shadow-lg shadow-indigo-500/20 mb-2">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-indigo-600 text-white shadow-sm mb-2">
           <Sparkles className="w-6 h-6" />
         </div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">Welcome back</h1>
-        <p className="text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Welcome back</h1>
+        <p className="text-sm text-slate-600 dark:text-slate-400">
           Sign in to resume your technical interview preparation
         </p>
       </div>
 
       {/* Card */}
-      <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl shadow-indigo-500/5 space-y-6">
+      <div className="bg-white dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm dark:shadow-2xl space-y-6">
         {/* Error Alert */}
         {authError && (
-          <div className="p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-2.5 text-sm text-red-400 animate-fadeIn">
-            <AlertCircle className="w-5 h-5 shrink-0 text-red-400 mt-0.5" />
+          <div className="p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl flex items-start gap-2.5 text-sm text-red-600 dark:text-red-400 animate-fadeIn">
+            <AlertCircle className="w-5 h-5 shrink-0 text-red-600 dark:text-red-400 mt-0.5" />
             <div className="flex-1 text-xs sm:text-sm">{authError}</div>
           </div>
         )}
@@ -148,8 +138,8 @@ function LoginForm() {
 
         {/* Divider */}
         <div className="relative flex items-center justify-center">
-          <div className="w-full border-t border-slate-800" />
-          <span className="absolute bg-slate-900 px-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
+          <div className="w-full border-t border-slate-200 dark:border-slate-800" />
+          <span className="absolute bg-white dark:bg-slate-900 px-3 text-xs font-medium text-slate-500 uppercase tracking-wider">
             Or sign in with email
           </span>
         </div>
@@ -182,7 +172,7 @@ function LoginForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="hover:text-slate-200 p-1 focus:outline-none cursor-pointer"
+                className="hover:text-slate-900 dark:hover:text-slate-200 p-1 focus:outline-none cursor-pointer text-slate-400"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -207,26 +197,26 @@ function LoginForm() {
 
         {/* Quick Demo Credentials Fill (in local mode) */}
         {isDemoMode && (
-          <div className="p-3 bg-slate-950/70 border border-slate-800/80 rounded-xl flex items-center justify-between text-xs">
-            <span className="text-slate-400">Quick Test Account:</span>
+          <div className="p-3 bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 rounded-xl flex items-center justify-between text-xs">
+            <span className="text-slate-600 dark:text-slate-400">Quick Test Account:</span>
             <button
               type="button"
               onClick={handleDemoFill}
-              className="inline-flex items-center gap-1.5 text-indigo-400 hover:text-indigo-300 font-medium px-2 py-1 rounded bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition-colors"
+              className="inline-flex items-center gap-1.5 text-indigo-700 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium px-2 py-1 rounded bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors"
             >
-              <Zap className="w-3.5 h-3.5 text-indigo-400" />
+              <Zap className="w-3.5 h-3.5" />
               <span>Fill Demo Credentials</span>
             </button>
           </div>
         )}
 
         {/* Footer Link */}
-        <div className="pt-2 text-center text-xs text-slate-400">
+        <div className="pt-2 text-center text-xs text-slate-600 dark:text-slate-400">
           <p>
             Don&apos;t have an account?{' '}
             <Link
               href="/signup"
-              className="font-medium text-indigo-400 hover:text-indigo-300 underline underline-offset-4"
+              className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 underline underline-offset-4"
             >
               Create an account
             </Link>
@@ -239,8 +229,8 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="flex-1 flex items-center justify-center px-4 py-12 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-slate-950">
-      <Suspense fallback={<div className="text-slate-400 text-sm">Loading sign in...</div>}>
+    <div className="flex-1 flex items-center justify-center px-4 py-12 bg-slate-50 dark:bg-slate-950 transition-colors">
+      <Suspense fallback={<div className="text-slate-500 dark:text-slate-400 text-sm">Loading sign in...</div>}>
         <LoginForm />
       </Suspense>
     </div>

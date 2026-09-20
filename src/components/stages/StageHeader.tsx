@@ -2,21 +2,15 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { StageId } from '@/types/auth.types';
 import { StageWorkflowStatus } from '@/types/workflow.types';
 import { Badge } from '@/components/common/Badge';
 import { Button } from '@/components/common/Button';
 import {
-  FileText,
-  Brain,
-  Code,
-  Mic,
   ArrowLeft,
   CheckCircle2,
   AlertTriangle,
   Clock,
-  Sparkles,
 } from 'lucide-react';
 
 interface StageHeaderProps {
@@ -40,13 +34,10 @@ export const StageHeader: React.FC<StageHeaderProps> = ({
   currentStageId,
   stageNumber,
   stageTitle,
-  stageSubtitle,
   streamName,
   status,
   score,
 }) => {
-  const router = useRouter();
-
   const getStatusBadge = () => {
     switch (status) {
       case 'passed':
@@ -83,7 +74,7 @@ export const StageHeader: React.FC<StageHeaderProps> = ({
   };
 
   return (
-    <div className="w-full bg-slate-950/80 border-b border-slate-800/80 backdrop-blur-md sticky top-16 z-30 py-3.5 px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-white/90 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800/80 backdrop-blur-md sticky top-16 z-30 py-3.5 px-4 sm:px-6 lg:px-8 transition-colors duration-150">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Left: Back button & Stage Title */}
         <div className="flex items-center gap-3">
@@ -92,17 +83,17 @@ export const StageHeader: React.FC<StageHeaderProps> = ({
               Dashboard
             </Button>
           </Link>
-          <div className="h-5 w-[1px] bg-slate-800 hidden sm:block" />
+          <div className="h-5 w-[1px] bg-slate-200 dark:bg-slate-800 hidden sm:block" />
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
                 Stage {stageNumber}
               </span>
-              <span className="text-slate-600">•</span>
-              <span className="text-xs text-slate-400 font-medium">{streamName}</span>
+              <span className="text-slate-300 dark:text-slate-600">•</span>
+              <span className="text-xs text-slate-600 dark:text-slate-400 font-medium">{streamName}</span>
               {getStatusBadge()}
             </div>
-            <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+            <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               {stageTitle}
             </h1>
           </div>
@@ -118,19 +109,19 @@ export const StageHeader: React.FC<StageHeaderProps> = ({
                 <div
                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
                     isCurrent
-                      ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
+                      ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-500/20 dark:text-indigo-300 dark:border-indigo-500/40'
                       : isPast
-                      ? 'text-emerald-400 bg-emerald-500/10'
-                      : 'text-slate-500 bg-slate-900/50'
+                      ? 'text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-500/10'
+                      : 'text-slate-500 bg-slate-100 dark:bg-slate-900/50 dark:text-slate-400'
                   }`}
                 >
                   <span
                     className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold ${
                       isCurrent
-                        ? 'bg-indigo-500 text-white'
+                        ? 'bg-indigo-600 text-white'
                         : isPast
-                        ? 'bg-emerald-500 text-white'
-                        : 'bg-slate-800 text-slate-400'
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                     }`}
                   >
                     {isPast ? '✓' : stg.number}
@@ -138,7 +129,7 @@ export const StageHeader: React.FC<StageHeaderProps> = ({
                   <span className="hidden sm:inline">{stg.label}</span>
                 </div>
                 {idx < stagesList.length - 1 && (
-                  <span className="text-slate-700 px-1">→</span>
+                  <span className="text-slate-300 dark:text-slate-700 px-1">→</span>
                 )}
               </div>
             );

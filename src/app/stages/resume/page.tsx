@@ -12,12 +12,9 @@ import { Button } from '@/components/common/Button';
 import { Badge } from '@/components/common/Badge';
 import {
   UploadCloud,
-  FileText,
   CheckCircle2,
-  AlertTriangle,
   ArrowRight,
   Sparkles,
-  RefreshCw,
   Award,
   ListChecks,
   AlertCircle,
@@ -27,7 +24,7 @@ import {
 export default function ResumeStagePage() {
   const router = useRouter();
   const { profile } = useAuth();
-  const { session, stageProgress, completeStage, updateStage } = useInterviewSession();
+  const { stageProgress, completeStage, updateStage } = useInterviewSession();
 
   const stream = profile?.selectedCareerStream
     ? getStreamById(profile.selectedCareerStream) || getDefaultStream()
@@ -64,10 +61,6 @@ export default function ResumeStagePage() {
   };
 
   const handleUploadAndAnalyze = async () => {
-    if (!file && !profile?.resumeUrl) {
-      // Use fallback default sample if user just clicks analyze
-    }
-
     setIsUploading(true);
     setAnalysisStatus('uploading');
     setUploadProgress(15);
@@ -102,7 +95,7 @@ export default function ResumeStagePage() {
 
   return (
     <AuthGuard requireCompletedProfile={true}>
-      <div className="min-h-screen bg-slate-950 flex flex-col">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col transition-colors duration-150">
         <StageHeader
           currentStageId="resume"
           stageNumber={1}
@@ -115,13 +108,13 @@ export default function ResumeStagePage() {
 
         <div className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           {/* Stage Overview Banner */}
-          <div className="p-6 bg-slate-900/60 border border-slate-800 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-6 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm dark:shadow-none">
             <div className="space-y-1">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
                 Evaluation Purpose
               </span>
-              <h2 className="text-xl font-bold text-white">Target Track: {stream.name}</h2>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-2xl">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Target Track: {stream.name}</h2>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl">
                 The AI Resume Evaluator inspects technical keyword density, production project impact metrics, core competencies, and ATS formatting specifically calibrated for {stream.shortName}.
               </p>
             </div>
@@ -133,11 +126,11 @@ export default function ResumeStagePage() {
 
           {/* UPLOAD SECTION */}
           <Card className="space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-4">
               <div>
-                <h3 className="text-base font-semibold text-white">Upload Your Resume</h3>
-                <p className="text-xs text-slate-400">
-                  Supported file types: <strong className="text-slate-200">.PDF, .DOCX, .TXT</strong> (Max 10MB)
+                <h3 className="text-base font-semibold text-slate-900 dark:text-white">Upload Your Resume</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Supported file types: <strong className="text-slate-800 dark:text-slate-200">.PDF, .DOCX, .TXT</strong> (Max 10MB)
                 </p>
               </div>
               {file && (
@@ -151,10 +144,10 @@ export default function ResumeStagePage() {
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleDrop}
-              className={`border-2 border-dashed rounded-2xl p-8 sm:p-12 text-center transition-all duration-200 flex flex-col items-center justify-center gap-3 cursor-pointer ${
+              className={`border-2 border-dashed rounded-2xl p-8 sm:p-12 text-center transition-all duration-150 flex flex-col items-center justify-center gap-3 cursor-pointer ${
                 file
-                  ? 'border-indigo-500/50 bg-indigo-500/5'
-                  : 'border-slate-800 hover:border-slate-700 bg-slate-950/40'
+                  ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-500/5'
+                  : 'border-slate-300 hover:border-slate-400 bg-slate-50/50 dark:border-slate-800 dark:hover:border-slate-700 dark:bg-slate-950/40'
               }`}
               onClick={() => document.getElementById('resume-file-input')?.click()}
             >
@@ -165,14 +158,14 @@ export default function ResumeStagePage() {
                 className="hidden"
                 onChange={handleFileChange}
               />
-              <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center">
+              <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                 <UploadCloud className="w-7 h-7" />
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-semibold text-white">
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">
                   {file ? file.name : 'Click to select or drag & drop your resume file'}
                 </p>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   {file
                     ? `${(file.size / (1024 * 1024)).toFixed(2)} MB • Ready for parsing`
                     : 'PDF, Word, or plain text formats accepted'}
@@ -184,14 +177,14 @@ export default function ResumeStagePage() {
             {isUploading && (
               <div className="space-y-2 animate-fadeIn">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-400">
+                  <span className="text-slate-600 dark:text-slate-400">
                     {analysisStatus === 'uploading' ? 'Uploading document...' : 'Parsing technical depth & ATS metrics...'}
                   </span>
-                  <span className="text-indigo-400 font-semibold">{uploadProgress}%</span>
+                  <span className="text-indigo-600 dark:text-indigo-400 font-semibold">{uploadProgress}%</span>
                 </div>
-                <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
                   <div
-                    className="bg-gradient-to-r from-indigo-500 to-cyan-500 h-full transition-all duration-300"
+                    className="bg-indigo-600 h-full transition-all duration-300"
                     style={{ width: `${uploadProgress}%` }}
                   />
                 </div>
@@ -220,83 +213,83 @@ export default function ResumeStagePage() {
           {/* ANALYSIS RESULTS & FEEDBACK PLACEHOLDER (Visible when analyzed) */}
           {analysisStatus === 'done' && (
             <div className="space-y-6 animate-fadeIn">
-              {/* Score Placeholder Header */}
+              {/* Score Header */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Card className="flex items-center gap-4 border-indigo-500/30">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+                <Card className="flex items-center gap-4 border-indigo-200 dark:border-indigo-500/30">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
                     <Award className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="text-xs text-slate-400 font-medium">Overall ATS Match</span>
-                    <div className="text-2xl font-bold text-white mt-0.5">{score}%</div>
-                    <span className="text-[11px] text-emerald-400 font-medium">
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Overall ATS Match</span>
+                    <div className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">{score}%</div>
+                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
                       Status: {score >= 60 ? 'Passed' : 'Needs Improvement'}
                     </span>
                   </div>
                 </Card>
 
                 <Card className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="text-xs text-slate-400 font-medium">Technical Competency</span>
-                    <div className="text-2xl font-bold text-white mt-0.5">88%</div>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Technical Competency</span>
+                    <div className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">88%</div>
                     <span className="text-[11px] text-slate-500">Core skills verified</span>
                   </div>
                 </Card>
 
                 <Card className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-cyan-50 dark:bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 flex items-center justify-center shrink-0">
                     <ListChecks className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="text-xs text-slate-400 font-medium">Keywords Coverage</span>
-                    <div className="text-2xl font-bold text-white mt-0.5">82%</div>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Keywords Coverage</span>
+                    <div className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">82%</div>
                     <span className="text-[11px] text-slate-500">{stream.shortName} taxonomy</span>
                   </div>
                 </Card>
               </div>
 
-              {/* Feedback Placeholder Cards */}
+              {/* Feedback Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className="space-y-3">
-                  <div className="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+                  <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-sm font-semibold">
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Identified Strengths</span>
                   </div>
-                  <ul className="space-y-2 text-xs text-slate-300">
+                  <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
                     <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">•</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold">•</span>
                       <span>Strong demonstration of production web architecture and database design.</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">•</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold">•</span>
                       <span>Clear enumeration of programming languages and full-stack frameworks.</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-emerald-400 font-bold">•</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-bold">•</span>
                       <span>Project descriptions effectively highlight modern CI/CD and deployment tooling.</span>
                     </li>
                   </ul>
                 </Card>
 
                 <Card className="space-y-3">
-                  <div className="flex items-center gap-2 text-amber-400 text-sm font-semibold">
+                  <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 text-sm font-semibold">
                     <AlertCircle className="w-4 h-4" />
                     <span>Actionable Improvement Areas</span>
                   </div>
-                  <ul className="space-y-2 text-xs text-slate-300">
+                  <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
                     <li className="flex items-start gap-2">
-                      <span className="text-amber-400 font-bold">•</span>
+                      <span className="text-amber-600 dark:text-amber-400 font-bold">•</span>
                       <span>Quantify project achievements using metrics (e.g. latency reduced by 30%, 10k DAU).</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-amber-400 font-bold">•</span>
+                      <span className="text-amber-600 dark:text-amber-400 font-bold">•</span>
                       <span>Explicitly mention unit testing coverage and distributed caching strategies.</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-amber-400 font-bold">•</span>
+                      <span className="text-amber-600 dark:text-amber-400 font-bold">•</span>
                       <span>Ensure ATS readability by using standard section headings.</span>
                     </li>
                   </ul>
@@ -304,18 +297,18 @@ export default function ResumeStagePage() {
               </div>
 
               {/* Next Stage Navigation CTA */}
-              <div className="p-6 bg-gradient-to-r from-indigo-950/40 via-slate-900 to-slate-900 border border-indigo-500/30 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-6 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-indigo-500/30 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm dark:shadow-none">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase text-emerald-400">
+                    <span className="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400">
                       Stage 1 Completed
                     </span>
                     <Badge variant="emerald" size="sm">Score: {score}%</Badge>
                   </div>
-                  <h4 className="text-base font-bold text-white">
+                  <h4 className="text-base font-bold text-slate-900 dark:text-white">
                     Stage 2: Aptitude Test is Now Unlocked
                   </h4>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
                     Assess logical reasoning, quantitative analysis, and technical problem solving.
                   </p>
                 </div>

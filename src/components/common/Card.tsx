@@ -16,10 +16,10 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <div
-      className={`relative bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-6 transition-all duration-300
+      className={`relative bg-white dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200 dark:border-slate-800/80 rounded-2xl p-6 transition-all duration-200 shadow-sm dark:shadow-none
         ${
           hoverable
-            ? 'hover:border-slate-700 hover:bg-slate-900/90 hover:shadow-xl hover:shadow-indigo-500/5 hover:-translate-y-0.5'
+            ? 'hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/70 dark:hover:bg-slate-900/90 hover:shadow-md dark:hover:shadow-xl hover:-translate-y-0.5'
             : ''
         }
         ${glow ? 'shadow-lg shadow-indigo-500/10 border-indigo-500/30' : ''}

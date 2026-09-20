@@ -6,27 +6,25 @@ import { useAuth } from '@/auth/auth-context';
 import { Button } from '@/components/common/Button';
 import { Badge } from '@/components/common/Badge';
 import { Card } from '@/components/common/Card';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { STAGES } from '@/config/site';
 import { CAREER_STREAMS } from '@/config/streams';
 import {
   Sparkles,
   ArrowRight,
-  ShieldCheck,
   Brain,
   FileText,
   Code,
   Mic,
-  Award,
   Terminal,
   Cpu,
   BarChart3,
-  CheckCircle2,
 } from 'lucide-react';
 
 const streamIconMap: Record<string, React.ReactNode> = {
-  Terminal: <Terminal className="w-5 h-5 text-blue-400" />,
-  Cpu: <Cpu className="w-5 h-5 text-violet-400" />,
-  BarChart3: <BarChart3 className="w-5 h-5 text-cyan-400" />,
+  Terminal: <Terminal className="w-5 h-5 text-blue-600 dark:text-blue-400" />,
+  Cpu: <Cpu className="w-5 h-5 text-purple-600 dark:text-purple-400" />,
+  BarChart3: <BarChart3 className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />,
 };
 
 const stageIcons: Record<string, React.ReactNode> = {
@@ -40,23 +38,32 @@ export default function HomePage() {
   const { user } = useAuth();
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col transition-colors duration-150">
       {/* HERO SECTION */}
-      <section className="relative overflow-hidden pt-20 pb-16 px-4 sm:px-6 lg:px-8 border-b border-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950/30 via-slate-950 to-slate-950">
+      <section className="relative overflow-hidden pt-16 pb-16 px-4 sm:px-6 lg:px-8 border-b border-slate-200 dark:border-slate-800/80 bg-gradient-to-b from-slate-100/70 via-white to-slate-50 dark:from-slate-900/60 dark:via-slate-950 dark:to-slate-950">
         <div className="max-w-5xl mx-auto text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-medium">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Structured 4-Stage AI Interview Pipeline</span>
+          {/* Top Pill with Pipeline Info & Theme Switcher */}
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 text-xs font-medium">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Structured 4-Stage AI Interview Pipeline</span>
+            </div>
+
+            {/* Clearly Visible Homepage Theme Toggle */}
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-xs text-slate-600 dark:text-slate-400">
+              <span className="font-medium text-[11px] hidden sm:inline">Theme:</span>
+              <ThemeToggle variant="segmented" />
+            </div>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
+          <h1 className="text-4xl sm:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
             Master Technical Interviews with{' '}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-violet-400 to-cyan-400">
+            <span className="text-indigo-600 dark:text-indigo-400">
               AI-Powered Simulation
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Prepare for real-world technical roles across Software Engineering, AI/ML, and Data Science. Progress through structured resume analysis, aptitude, coding, and dynamic voice mock interviews.
           </p>
 
@@ -91,10 +98,10 @@ export default function HomePage() {
           <Badge variant="indigo" size="sm">
             Core Interview Pipeline
           </Badge>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             Four Rigorous Evaluation Stages
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             A comprehensive sequential interview preparation flow simulating real employer hiring loops.
           </p>
         </div>
@@ -103,26 +110,26 @@ export default function HomePage() {
           {STAGES.map((stage) => (
             <Card key={stage.id} hoverable className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   Stage {stage.stageNumber}
                 </span>
-                <span className="text-[11px] text-slate-400">~{stage.durationMinutes}m</span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400">~{stage.durationMinutes}m</span>
               </div>
 
-              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center border border-indigo-500/20">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-200 dark:border-indigo-500/20">
                 {stageIcons[stage.iconName]}
               </div>
 
               <div>
-                <h3 className="text-base font-bold text-white">{stage.title}</h3>
-                <p className="text-xs text-indigo-400 font-medium">{stage.subtitle}</p>
-                <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">{stage.title}</h3>
+                <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium">{stage.subtitle}</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
                   {stage.description}
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-slate-800 text-[11px] text-slate-400">
-                <strong className="text-slate-300">Focus:</strong> {stage.criteriaSummary}
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400">
+                <strong className="text-slate-800 dark:text-slate-300">Focus:</strong> {stage.criteriaSummary}
               </div>
             </Card>
           ))}
@@ -130,16 +137,16 @@ export default function HomePage() {
       </section>
 
       {/* SUPPORTED CAREER STREAMS SECTION */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-slate-900 bg-slate-950/50">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50">
         <div className="max-w-7xl mx-auto space-y-10">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
             <Badge variant="cyan" size="sm">
               Extensible Career Streams
             </Badge>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
               Tailored Criteria for Every Domain
             </h2>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-600 dark:text-slate-400">
               Each career stream features custom resume ATS weights, specialized questions, and stream-specific rubrics.
             </p>
           </div>
@@ -148,7 +155,7 @@ export default function HomePage() {
             {CAREER_STREAMS.map((stream) => (
               <Card key={stream.id} hoverable className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-slate-800 border border-slate-700">
+                  <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                     {streamIconMap[stream.icon]}
                   </div>
                   <Badge variant="slate" size="sm">
@@ -157,14 +164,14 @@ export default function HomePage() {
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-base text-white">{stream.name}</h3>
-                  <p className="text-xs text-indigo-400 mt-0.5">{stream.tagline}</p>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+                  <h3 className="font-bold text-base text-slate-900 dark:text-white">{stream.name}</h3>
+                  <p className="text-xs text-indigo-600 dark:text-indigo-400 mt-0.5">{stream.tagline}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
                     {stream.description}
                   </p>
                 </div>
 
-                <div className="space-y-2 pt-2 border-t border-slate-800">
+                <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                   <span className="text-[11px] uppercase tracking-wider font-semibold text-slate-500">
                     Key Topics
                   </span>
@@ -172,7 +179,7 @@ export default function HomePage() {
                     {stream.recommendedSkills.slice(0, 4).map((sk) => (
                       <span
                         key={sk}
-                        className="text-[10px] px-2 py-0.5 rounded-md bg-slate-800/80 text-slate-300 border border-slate-700/50"
+                        className="text-[10px] px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/50"
                       >
                         {sk}
                       </span>
@@ -186,10 +193,10 @@ export default function HomePage() {
       </section>
 
       {/* CALL TO ACTION */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-slate-900 text-center bg-gradient-to-b from-slate-950 to-slate-900">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-800 text-center bg-white dark:bg-gradient-to-b dark:from-slate-950 dark:to-slate-900">
         <div className="max-w-2xl mx-auto space-y-6">
-          <h2 className="text-3xl font-bold text-white">Ready to begin your preparation?</h2>
-          <p className="text-sm text-slate-400 leading-relaxed">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Ready to begin your preparation?</h2>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
             Create an account, select your career stream, and benchmark your technical interview readiness with structured AI evaluations.
           </p>
           <div className="flex items-center justify-center gap-4">

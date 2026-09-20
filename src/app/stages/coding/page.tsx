@@ -181,13 +181,13 @@ export default function CodingStagePage() {
   if (accessAllowed === false) {
     return (
       <AuthGuard requireCompletedProfile={true}>
-        <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4">
           <Card className="max-w-md w-full text-center space-y-4 p-8">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 dark:text-amber-400 flex items-center justify-center mx-auto">
               <AlertCircle className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold text-white">Stage Locked</h2>
-            <p className="text-sm text-slate-400 leading-relaxed">{accessReason}</p>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Stage Locked</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{accessReason}</p>
             <Button
               variant="primary"
               size="md"
@@ -204,7 +204,7 @@ export default function CodingStagePage() {
 
   return (
     <AuthGuard requireCompletedProfile={true}>
-      <div className="min-h-screen bg-slate-950 flex flex-col">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col">
         <StageHeader
           currentStageId="coding"
           stageNumber={3}
@@ -221,61 +221,61 @@ export default function CodingStagePage() {
             {/* LEFT PANEL: Problem Description, Examples & Constraints */}
             <div className="lg:col-span-5 flex flex-col space-y-4">
               <Card className="flex-1 space-y-5 overflow-y-auto max-h-[calc(100vh-14rem)]">
-                <div className="space-y-2 border-b border-slate-800 pb-4">
+                <div className="space-y-2 border-b border-slate-200 dark:border-slate-800 pb-4">
                   <div className="flex items-center gap-2">
                     <Badge variant="emerald" size="sm">Easy</Badge>
-                    <Badge variant="indigo" size="sm">Array / Hash Map</Badge>
+                    <Badge variant="blue" size="sm">Array / Hash Map</Badge>
                   </div>
-                  <h2 className="text-xl font-bold text-white">1. Two Sum Target Lookup</h2>
-                  <p className="text-xs text-slate-400">Stream Alignment: {stream.shortName}</p>
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white">1. Two Sum Target Lookup</h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Stream Alignment: {stream.shortName}</p>
                 </div>
 
                 {/* Problem Statement */}
-                <div className="space-y-2 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <div className="space-y-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
                   <p>
-                    Given an array of integers <code className="bg-slate-800 text-indigo-300 px-1 py-0.5 rounded text-xs">nums</code> and an integer <code className="bg-slate-800 text-indigo-300 px-1 py-0.5 rounded text-xs">target</code>, return indices of the two numbers such that they add up to <code className="bg-slate-800 text-indigo-300 px-1 py-0.5 rounded text-xs">target</code>.
+                    Given an array of integers <code className="bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 px-1 py-0.5 rounded text-xs font-mono">nums</code> and an integer <code className="bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 px-1 py-0.5 rounded text-xs font-mono">target</code>, return indices of the two numbers such that they add up to <code className="bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-300 px-1 py-0.5 rounded text-xs font-mono">target</code>.
                   </p>
-                  <p className="text-slate-400 text-xs">
+                  <p className="text-slate-600 dark:text-slate-400 text-xs">
                     You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order.
                   </p>
                 </div>
 
                 {/* Examples */}
                 <div className="space-y-3">
-                  <span className="text-xs font-bold text-white uppercase tracking-wider">
+                  <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                     Examples
                   </span>
 
                   {/* Example 1 */}
-                  <div className="p-3 bg-slate-950/70 border border-slate-800/80 rounded-xl space-y-1.5 text-xs font-mono">
-                    <div className="text-slate-400">
-                      <strong className="text-slate-200">Input:</strong> nums = [2, 7, 11, 15], target = 9
+                  <div className="p-3 bg-slate-100 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 rounded-xl space-y-1.5 text-xs font-mono">
+                    <div className="text-slate-600 dark:text-slate-400">
+                      <strong className="text-slate-900 dark:text-slate-200">Input:</strong> nums = [2, 7, 11, 15], target = 9
                     </div>
-                    <div className="text-slate-400">
-                      <strong className="text-slate-200">Output:</strong> [0, 1]
+                    <div className="text-slate-600 dark:text-slate-400">
+                      <strong className="text-slate-900 dark:text-slate-200">Output:</strong> [0, 1]
                     </div>
-                    <div className="text-slate-500 text-[11px] font-sans">
+                    <div className="text-slate-500 dark:text-slate-400 text-[11px] font-sans">
                       Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
                     </div>
                   </div>
 
                   {/* Example 2 */}
-                  <div className="p-3 bg-slate-950/70 border border-slate-800/80 rounded-xl space-y-1.5 text-xs font-mono">
-                    <div className="text-slate-400">
-                      <strong className="text-slate-200">Input:</strong> nums = [3, 2, 4], target = 6
+                  <div className="p-3 bg-slate-100 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 rounded-xl space-y-1.5 text-xs font-mono">
+                    <div className="text-slate-600 dark:text-slate-400">
+                      <strong className="text-slate-900 dark:text-slate-200">Input:</strong> nums = [3, 2, 4], target = 6
                     </div>
-                    <div className="text-slate-400">
-                      <strong className="text-slate-200">Output:</strong> [1, 2]
+                    <div className="text-slate-600 dark:text-slate-400">
+                      <strong className="text-slate-900 dark:text-slate-200">Output:</strong> [1, 2]
                     </div>
                   </div>
                 </div>
 
                 {/* Constraints */}
-                <div className="space-y-2 pt-2 border-t border-slate-800/80 text-xs">
-                  <span className="font-bold text-white uppercase tracking-wider block">
+                <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800/80 text-xs">
+                  <span className="font-bold text-slate-900 dark:text-white uppercase tracking-wider block">
                     Constraints
                   </span>
-                  <ul className="space-y-1 text-slate-400 font-mono text-[11px]">
+                  <ul className="space-y-1 text-slate-600 dark:text-slate-400 font-mono text-[11px]">
                     <li>• 2 &lt;= nums.length &lt;= 10^4</li>
                     <li>• -10^9 &lt;= nums[i] &lt;= 10^9</li>
                     <li>• -10^9 &lt;= target &lt;= 10^9</li>
@@ -288,19 +288,19 @@ export default function CodingStagePage() {
             {/* RIGHT PANEL: Code Editor & Execution Results */}
             <div className="lg:col-span-7 flex flex-col space-y-4">
               {/* Editor Header */}
-              <div className="flex items-center justify-between p-3 bg-slate-900 border border-slate-800 rounded-t-2xl">
+              <div className="flex items-center justify-between p-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-t-2xl">
                 <div className="flex items-center gap-2">
-                  <Code className="w-4 h-4 text-indigo-400" />
-                  <span className="text-xs font-semibold text-white">Solution Editor</span>
+                  <Code className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <span className="text-xs font-semibold text-slate-900 dark:text-white">Solution Editor</span>
                 </div>
 
                 {/* Language Selector */}
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-400">Language:</span>
+                  <span className="text-xs text-slate-600 dark:text-slate-400">Language:</span>
                   <select
                     value={language}
                     onChange={handleLanguageChange}
-                    className="bg-slate-950 border border-slate-700 text-slate-200 rounded-lg px-2.5 py-1 text-xs outline-none focus:border-indigo-500 cursor-pointer"
+                    className="bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-200 rounded-lg px-2.5 py-1 text-xs outline-none focus:border-indigo-500 cursor-pointer"
                   >
                     <option value="python">Python 3</option>
                     <option value="typescript">TypeScript</option>
@@ -312,24 +312,24 @@ export default function CodingStagePage() {
               </div>
 
               {/* Code Area */}
-              <div className="relative bg-slate-950 border-x border-slate-800 p-3 font-mono text-xs text-slate-200 min-h-[300px] flex-1 flex">
+              <div className="relative bg-white dark:bg-slate-950 border-x border-slate-200 dark:border-slate-800 p-3 font-mono text-xs text-slate-900 dark:text-slate-200 min-h-[300px] flex-1 flex">
                 <textarea
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   spellCheck={false}
-                  className="w-full h-full bg-transparent resize-none outline-none font-mono text-xs leading-relaxed text-indigo-100 placeholder:text-slate-600"
+                  className="w-full h-full bg-transparent resize-none outline-none font-mono text-xs leading-relaxed text-slate-900 dark:text-indigo-100 placeholder:text-slate-400 dark:placeholder:text-slate-600"
                 />
               </div>
 
               {/* Action Bar (Run & Submit) */}
-              <div className="flex items-center justify-between p-3 bg-slate-900 border border-slate-800 rounded-b-2xl">
+              <div className="flex items-center justify-between p-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-b-2xl">
                 <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={handleRunCode}
                     isLoading={isRunning}
-                    leftIcon={<Play className="w-3.5 h-3.5 text-emerald-400" />}
+                    leftIcon={<Play className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />}
                   >
                     Run Code
                   </Button>
@@ -348,14 +348,14 @@ export default function CodingStagePage() {
 
               {/* RESULT PLACEHOLDER */}
               <Card className="space-y-3 p-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => setActiveTab('tests')}
                       className={`text-xs font-semibold pb-1 cursor-pointer transition-colors ${
                         activeTab === 'tests'
-                          ? 'text-indigo-400 border-b-2 border-indigo-500'
-                          : 'text-slate-400 hover:text-slate-200'
+                          ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-500'
+                          : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                       }`}
                     >
                       Test Cases
@@ -364,8 +364,8 @@ export default function CodingStagePage() {
                       onClick={() => setActiveTab('output')}
                       className={`text-xs font-semibold pb-1 cursor-pointer transition-colors ${
                         activeTab === 'output'
-                          ? 'text-indigo-400 border-b-2 border-indigo-500'
-                          : 'text-slate-400 hover:text-slate-200'
+                          ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-500'
+                          : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                       }`}
                     >
                       Console Output
@@ -381,32 +381,32 @@ export default function CodingStagePage() {
 
                 {runResults ? (
                   <div className="space-y-2 text-xs font-mono">
-                    <div className="flex items-center gap-4 text-[11px] text-slate-400">
-                      <span>Runtime: <strong className="text-emerald-400">{runResults.runtime}</strong></span>
-                      <span>Memory: <strong className="text-slate-200">{runResults.memory}</strong></span>
+                    <div className="flex items-center gap-4 text-[11px] text-slate-500 dark:text-slate-400">
+                      <span>Runtime: <strong className="text-emerald-600 dark:text-emerald-400">{runResults.runtime}</strong></span>
+                      <span>Memory: <strong className="text-slate-800 dark:text-slate-200">{runResults.memory}</strong></span>
                     </div>
-                    <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-300">
+                    <div className="p-3 bg-slate-100 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-300">
                       {activeTab === 'tests' ? (
                         <div className="space-y-1.5">
-                          <div className="flex items-center gap-2 text-emerald-400">
+                          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
                             <span>✓ Test Case 1: [2, 7, 11, 15], 9 ➔ Passed</span>
                           </div>
-                          <div className="flex items-center gap-2 text-emerald-400">
+                          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
                             <span>✓ Test Case 2: [3, 2, 4], 6 ➔ Passed</span>
                           </div>
-                          <div className="flex items-center gap-2 text-emerald-400">
+                          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
                             <span>✓ Test Case 3: [3, 3], 6 ➔ Passed</span>
                           </div>
                         </div>
                       ) : (
-                        <pre className="text-[11px] text-slate-300 whitespace-pre-wrap">
+                        <pre className="text-[11px] text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
                           {runResults.output}
                         </pre>
                       )}
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-6 text-xs text-slate-500">
+                  <div className="text-center py-6 text-xs text-slate-500 dark:text-slate-400">
                     Click &quot;Run Code&quot; to execute sample test cases or &quot;Submit Solution&quot; to evaluate full test suite.
                   </div>
                 )}
@@ -414,15 +414,15 @@ export default function CodingStagePage() {
 
               {/* NEXT STAGE CTA (Visible when passed) */}
               {isCompleted && (
-                <div className="p-4 bg-gradient-to-r from-indigo-950/40 via-slate-900 to-slate-900 border border-indigo-500/30 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 animate-fadeIn">
+                <div className="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm animate-fadeIn">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold uppercase text-emerald-400">
+                      <span className="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400">
                         Stage 3 Completed
                       </span>
                       <Badge variant="emerald" size="sm">Score: {score}%</Badge>
                     </div>
-                    <h4 className="text-sm font-bold text-white mt-0.5">
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">
                       Stage 4: AI Mock Interview is Ready
                     </h4>
                   </div>

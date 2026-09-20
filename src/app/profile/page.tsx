@@ -5,10 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/auth/auth-context';
 import { AuthGuard } from '@/auth/auth-guard';
 import { CAREER_STREAMS } from '@/config/streams';
-import { CareerStreamId } from '@/types/stream.types';
 import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
-import { Badge } from '@/components/common/Badge';
 import { Card } from '@/components/common/Card';
 import {
   User as UserIcon,
@@ -26,9 +24,9 @@ import {
 } from 'lucide-react';
 
 const streamIconMap: Record<string, React.ReactNode> = {
-  Terminal: <Terminal className="w-5 h-5 text-blue-400" />,
-  Cpu: <Cpu className="w-5 h-5 text-violet-400" />,
-  BarChart3: <BarChart3 className="w-5 h-5 text-cyan-400" />,
+  Terminal: <Terminal className="w-5 h-5 text-blue-600 dark:text-blue-400" />,
+  Cpu: <Cpu className="w-5 h-5 text-purple-600 dark:text-purple-400" />,
+  BarChart3: <BarChart3 className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />,
 };
 
 function ProfileContent() {
@@ -101,14 +99,14 @@ function ProfileContent() {
     setError(null);
 
     if (!selectedStream) {
-      setError('Please select a target career stream to configure your interview preparation.');
+      setError('Please select a Career Stream to customize your interview pipeline.');
       return;
     }
 
     setIsSaving(true);
     try {
       await updateUserProfile({
-        name: name.trim(),
+        name: name.trim() || user?.displayName || 'Candidate',
         selectedCareerStream: selectedStream,
         profileInformation: {
           headline: headline.trim(),
@@ -126,8 +124,8 @@ function ProfileContent() {
       setTimeout(() => {
         router.push('/dashboard');
       }, 800);
-    } catch {
-      setError('Failed to save profile. Please try again.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to update profile.');
     } finally {
       setIsSaving(false);
     }
@@ -136,18 +134,18 @@ function ProfileContent() {
   const currentStreamConfig = CAREER_STREAMS.find((s) => s.id === selectedStream);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 transition-colors duration-150">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
         <div>
-          <div className="flex items-center gap-2 text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-1">
             <UserIcon className="w-3.5 h-3.5" />
             <span>Candidate Profile & Stream Setup</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
             Personalize Your Interview Journey
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
             Select your technical track so AI can tailor resume criteria, aptitude, and mock interview questions.
           </p>
         </div>
@@ -166,14 +164,14 @@ function ProfileContent() {
 
       {/* Notifications */}
       {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-3 text-sm text-red-400 animate-fadeIn">
+        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center gap-3 text-sm text-red-600 dark:text-red-400 animate-fadeIn">
           <AlertCircle className="w-5 h-5 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {saveSuccess && (
-        <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center gap-3 text-sm text-emerald-400 animate-fadeIn">
+        <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center gap-3 text-sm text-emerald-600 dark:text-emerald-400 animate-fadeIn">
           <CheckCircle2 className="w-5 h-5 shrink-0" />
           <span>Profile saved successfully! Redirecting to Dashboard...</span>
         </div>
@@ -184,12 +182,12 @@ function ProfileContent() {
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                <Compass className="w-4 h-4 text-indigo-400" />
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                <Compass className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>1. Select Your Career Stream</span>
-                <span className="text-red-400 text-sm">*</span>
+                <span className="text-red-500 text-sm">*</span>
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Determines the technical depth, ATS keywords, and problem-solving rubrics across all 4 stages.
               </p>
             </div>
@@ -202,39 +200,39 @@ function ProfileContent() {
                 <div
                   key={stream.id}
                   onClick={() => handleSelectStream(stream.id)}
-                  className={`relative rounded-2xl p-5 border transition-all duration-200 cursor-pointer text-left flex flex-col justify-between ${
+                  className={`relative rounded-2xl p-5 border transition-all duration-150 cursor-pointer text-left flex flex-col justify-between ${
                     isSelected
-                      ? 'bg-slate-900 border-indigo-500 shadow-lg shadow-indigo-500/10 ring-1 ring-indigo-500'
-                      : 'bg-slate-900/40 border-slate-800 hover:border-slate-700 hover:bg-slate-900/70'
+                      ? 'bg-indigo-50/50 dark:bg-slate-900 border-indigo-500 shadow-sm dark:shadow-indigo-500/10 ring-1 ring-indigo-500'
+                      : 'bg-white dark:bg-slate-900/40 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/70 dark:hover:bg-slate-900/70'
                   }`}
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <div className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60">
-                        {streamIconMap[stream.icon] || <Sparkles className="w-5 h-5 text-indigo-400" />}
+                      <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60">
+                        {streamIconMap[stream.icon] || <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />}
                       </div>
                       {isSelected ? (
-                        <div className="w-6 h-6 rounded-full bg-indigo-500 text-white flex items-center justify-center">
+                        <div className="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center">
                           <Check className="w-3.5 h-3.5 stroke-[3]" />
                         </div>
                       ) : (
-                        <div className="w-6 h-6 rounded-full border border-slate-700" />
+                        <div className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-700" />
                       )}
                     </div>
 
                     <div>
-                      <h3 className="font-semibold text-sm text-white">{stream.name}</h3>
-                      <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                      <h3 className="font-semibold text-sm text-slate-900 dark:text-white">{stream.name}</h3>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">
                         {stream.tagline}
                       </p>
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-800/80 flex flex-wrap gap-1">
+                  <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800/80 flex flex-wrap gap-1">
                     {stream.recommendedSkills.slice(0, 3).map((sk) => (
                       <span
                         key={sk}
-                        className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300"
+                        className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60"
                       >
                         {sk}
                       </span>
@@ -248,8 +246,8 @@ function ProfileContent() {
 
         {/* SECTION 2: Basic Information */}
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-            <Briefcase className="w-4 h-4 text-indigo-400" />
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+            <Briefcase className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             <span>2. Candidate Information</span>
           </h2>
 
@@ -279,7 +277,7 @@ function ProfileContent() {
             </div>
 
             <div className="sm:col-span-2 flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-slate-300">
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Brief Bio / Interview Objective
               </label>
               <textarea
@@ -287,7 +285,7 @@ function ProfileContent() {
                 onChange={(e) => setBio(e.target.value)}
                 rows={3}
                 placeholder="Briefly describe your experience, tech stack, and what level of interview you're targeting..."
-                className="w-full bg-slate-900/80 border border-slate-800 hover:border-slate-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-100 placeholder:text-slate-500 rounded-xl p-3 text-sm transition-all duration-200 outline-none resize-none"
+                className="w-full bg-white dark:bg-slate-900/80 border border-slate-300 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 focus:border-indigo-600 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl p-3 text-sm transition-all duration-150 outline-none resize-none"
               />
             </div>
           </Card>
@@ -295,8 +293,8 @@ function ProfileContent() {
 
         {/* SECTION 3: Technical Skills */}
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-indigo-400" />
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             <span>3. Technical Skills & Keywords</span>
           </h2>
 
@@ -304,7 +302,7 @@ function ProfileContent() {
             {/* Recommended Skills Pill Toggles */}
             {currentStreamConfig && (
               <div className="space-y-2">
-                <span className="text-xs font-medium text-slate-400">
+                <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
                   Recommended for {currentStreamConfig.shortName} (Click to toggle):
                 </span>
                 <div className="flex flex-wrap gap-1.5">
@@ -317,8 +315,8 @@ function ProfileContent() {
                         onClick={() => handleToggleRecommendedSkill(sk)}
                         className={`text-xs px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300 font-medium'
-                            : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-slate-200'
+                            ? 'bg-indigo-50 dark:bg-indigo-500/20 border-indigo-200 dark:border-indigo-500/40 text-indigo-700 dark:text-indigo-300 font-medium'
+                            : 'bg-slate-100 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                         }`}
                       >
                         {isSelected ? '✓ ' : '+ '}
@@ -344,20 +342,20 @@ function ProfileContent() {
             {/* Active Skills List */}
             {skills.length > 0 && (
               <div className="pt-2">
-                <span className="text-xs font-medium text-slate-400 block mb-2">
+                <span className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-2">
                   Your Current Skills ({skills.length}):
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {skills.map((skill) => (
                     <span
                       key={skill}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-800 border border-slate-700 text-slate-200"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200"
                     >
                       {skill}
                       <button
                         type="button"
                         onClick={() => handleRemoveSkill(skill)}
-                        className="hover:text-red-400 text-slate-500 ml-0.5"
+                        className="hover:text-red-600 dark:hover:text-red-400 text-slate-400 ml-0.5 cursor-pointer"
                       >
                         ×
                       </button>
@@ -371,8 +369,8 @@ function ProfileContent() {
 
         {/* SECTION 4: Education */}
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-            <GraduationCap className="w-4 h-4 text-indigo-400" />
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+            <GraduationCap className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             <span>4. Academic Background</span>
           </h2>
 
@@ -399,7 +397,7 @@ function ProfileContent() {
         </section>
 
         {/* Submit Bar */}
-        <div className="flex items-center justify-end gap-4 pt-4 border-t border-slate-800">
+        <div className="flex items-center justify-end gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
           <Button
             type="submit"
             variant="primary"

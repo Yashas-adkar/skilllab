@@ -52,19 +52,18 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ pa
   if (!password) return null;
 
   const { score, criteria, label, colorClass } = evaluatePassword(password);
-  const percentage = Math.round((score / 5) * 100);
 
   return (
-    <div className="w-full mt-2 p-3 bg-slate-900/60 border border-slate-800/80 rounded-xl space-y-2.5">
+    <div className="w-full mt-2 p-3 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-xl space-y-2.5">
       <div className="flex items-center justify-between text-xs">
-        <span className="text-slate-400 font-medium">Password Strength</span>
+        <span className="text-slate-600 dark:text-slate-400 font-medium">Password Strength</span>
         <span
           className={`font-semibold ${
             score >= 4
-              ? 'text-emerald-400'
+              ? 'text-emerald-600 dark:text-emerald-400'
               : score >= 3
-              ? 'text-amber-400'
-              : 'text-red-400'
+              ? 'text-amber-600 dark:text-amber-400'
+              : 'text-red-600 dark:text-red-400'
           }`}
         >
           {label}
@@ -77,7 +76,7 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ pa
           <div
             key={level}
             className={`h-full rounded-full transition-all duration-300 ${
-              score >= level ? colorClass : 'bg-slate-800'
+              score >= level ? colorClass : 'bg-slate-200 dark:bg-slate-800'
             }`}
           />
         ))}
@@ -89,13 +88,13 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ pa
           <div
             key={i}
             className={`flex items-center gap-1.5 transition-colors duration-200 ${
-              c.met ? 'text-emerald-400' : 'text-slate-400'
+              c.met ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'
             }`}
           >
             {c.met ? (
-              <Check className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+              <Check className="w-3.5 h-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
             ) : (
-              <X className="w-3.5 h-3.5 shrink-0 text-slate-400" />
+              <X className="w-3.5 h-3.5 shrink-0 text-slate-400 dark:text-slate-500" />
             )}
             <span>{c.label}</span>
           </div>

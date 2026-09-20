@@ -33,17 +33,17 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 text-slate-200">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4 text-slate-900 dark:text-slate-100 transition-colors">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-sm">
             <Sparkles className="w-5 h-5" />
           </div>
-          <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+          <span className="text-xl font-bold text-slate-900 dark:text-white">
             SkillLab
           </span>
         </div>
-        <div className="flex items-center gap-2 text-sm text-slate-400">
-          <Loader2 className="w-4 h-4 animate-spin text-indigo-400" />
+        <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+          <Loader2 className="w-4 h-4 animate-spin text-indigo-600 dark:text-indigo-400" />
           <span>Verifying authentication...</span>
         </div>
       </div>

@@ -149,13 +149,13 @@ export default function AptitudeStagePage() {
   if (accessAllowed === false) {
     return (
       <AuthGuard requireCompletedProfile={true}>
-        <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4">
           <Card className="max-w-md w-full text-center space-y-4 p-8">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 dark:text-amber-400 flex items-center justify-center mx-auto">
               <AlertCircle className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold text-white">Stage Locked</h2>
-            <p className="text-sm text-slate-400 leading-relaxed">{accessReason}</p>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Stage Locked</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{accessReason}</p>
             <Button
               variant="primary"
               size="md"
@@ -172,7 +172,7 @@ export default function AptitudeStagePage() {
 
   return (
     <AuthGuard requireCompletedProfile={true}>
-      <div className="min-h-screen bg-slate-950 flex flex-col">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col">
         <StageHeader
           currentStageId="aptitude"
           stageNumber={2}
@@ -185,20 +185,20 @@ export default function AptitudeStagePage() {
 
         <div className="max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6">
           {/* Top Bar with Timer and Progress */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-slate-900/70 border border-slate-800 rounded-2xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-300">
-                <Brain className="w-4 h-4 text-indigo-400" />
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <Brain className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 <span>Question {currentIndex + 1} of {mockQuestions.length}</span>
               </div>
-              <Badge variant="violet" size="sm">
+              <Badge variant="blue" size="sm">
                 {currentQ.category}
               </Badge>
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-mono font-bold">
-                <Clock className="w-4 h-4 text-indigo-400 animate-pulse" />
+              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-bold">
+                <Clock className="w-4 h-4 text-indigo-600 dark:text-indigo-400 animate-pulse" />
                 <span>{formatTimer(timeLeft)} remaining</span>
               </div>
 
@@ -217,7 +217,7 @@ export default function AptitudeStagePage() {
 
           {/* Question Navigation Palette */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2">
-            <span className="text-xs text-slate-500 font-medium mr-1">Questions:</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium mr-1">Questions:</span>
             {mockQuestions.map((q, idx) => {
               const isAnswered = selectedAnswers[idx] !== undefined;
               const isCurrent = currentIndex === idx;
@@ -227,10 +227,10 @@ export default function AptitudeStagePage() {
                   onClick={() => setCurrentIndex(idx)}
                   className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     isCurrent
-                      ? 'bg-indigo-500 text-white shadow-md shadow-indigo-500/30 ring-2 ring-indigo-400'
+                      ? 'bg-indigo-600 dark:bg-indigo-500 text-white shadow-md shadow-indigo-500/30 ring-2 ring-indigo-400'
                       : isAnswered
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                      : 'bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700'
+                      ? 'bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/40'
+                      : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
                   }`}
                 >
                   {idx + 1}
@@ -243,10 +243,10 @@ export default function AptitudeStagePage() {
           {!isSubmitted ? (
             <Card className="space-y-6">
               <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
                   {currentQ.category}
                 </span>
-                <h3 className="text-base sm:text-lg font-semibold text-white leading-relaxed">
+                <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white leading-relaxed">
                   {currentQ.question}
                 </h3>
               </div>
@@ -261,16 +261,16 @@ export default function AptitudeStagePage() {
                       onClick={() => handleSelectOption(optIdx)}
                       className={`p-4 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between ${
                         isSelected
-                          ? 'bg-indigo-500/10 border-indigo-500 text-white shadow-md shadow-indigo-500/5'
-                          : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-900'
+                          ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-600 dark:border-indigo-500 text-slate-900 dark:text-white shadow-sm ring-1 ring-indigo-500'
+                          : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900'
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <span
                           className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${
                             isSelected
-                              ? 'bg-indigo-500 text-white'
-                              : 'bg-slate-800 text-slate-400'
+                              ? 'bg-indigo-600 dark:bg-indigo-500 text-white'
+                              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                           }`}
                         >
                           {String.fromCharCode(65 + optIdx)}
@@ -280,8 +280,8 @@ export default function AptitudeStagePage() {
                       <div
                         className={`w-5 h-5 rounded-full border flex items-center justify-center ${
                           isSelected
-                            ? 'border-indigo-500 bg-indigo-500 text-white'
-                            : 'border-slate-700'
+                            ? 'border-indigo-600 dark:border-indigo-500 bg-indigo-600 dark:bg-indigo-500 text-white'
+                            : 'border-slate-300 dark:border-slate-700'
                         }`}
                       >
                         {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
@@ -292,7 +292,7 @@ export default function AptitudeStagePage() {
               </div>
 
               {/* Navigation Controls */}
-              <div className="flex items-center justify-between pt-4 border-t border-slate-800/80">
+              <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-800/80">
                 <Button
                   variant="outline"
                   size="md"
@@ -328,55 +328,55 @@ export default function AptitudeStagePage() {
             /* SCORE PLACEHOLDER SECTION (Visible after submit) */
             <div className="space-y-6 animate-fadeIn">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Card className="flex items-center gap-4 border-indigo-500/30">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+                <Card className="flex items-center gap-4 border-indigo-200 dark:border-indigo-500/30">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
                     <Award className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="text-xs text-slate-400 font-medium">Aptitude Score</span>
-                    <div className="text-2xl font-bold text-white mt-0.5">{score}%</div>
-                    <span className="text-[11px] text-emerald-400 font-medium">
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Aptitude Score</span>
+                    <div className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">{score}%</div>
+                    <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
                       Status: Passed (Benchmark: 60%)
                     </span>
                   </div>
                 </Card>
 
                 <Card className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="text-xs text-slate-400 font-medium">Accuracy</span>
-                    <div className="text-2xl font-bold text-white mt-0.5">75%</div>
-                    <span className="text-[11px] text-slate-500">3 of 4 answered correctly</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Accuracy</span>
+                    <div className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">75%</div>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400">3 of 4 answered correctly</span>
                   </div>
                 </Card>
 
                 <Card className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
                     <BarChart2 className="w-6 h-6" />
                   </div>
                   <div>
-                    <span className="text-xs text-slate-400 font-medium">Time Efficiency</span>
-                    <div className="text-2xl font-bold text-white mt-0.5">Fast</div>
-                    <span className="text-[11px] text-slate-500">Under time allocation</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Time Efficiency</span>
+                    <div className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">Fast</div>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400">Under time allocation</span>
                   </div>
                 </Card>
               </div>
 
               {/* Next Stage Navigation CTA */}
-              <div className="p-6 bg-gradient-to-r from-indigo-950/40 via-slate-900 to-slate-900 border border-indigo-500/30 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase text-emerald-400">
+                    <span className="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400">
                       Stage 2 Completed
                     </span>
                     <Badge variant="emerald" size="sm">Score: {score}%</Badge>
                   </div>
-                  <h4 className="text-base font-bold text-white">
+                  <h4 className="text-base font-bold text-slate-900 dark:text-white">
                     Stage 3: Coding / Problem Solving is Now Unlocked
                   </h4>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
                     Test your algorithms, data structures, and hands-on coding ability in our interactive IDE.
                   </p>
                 </div>
