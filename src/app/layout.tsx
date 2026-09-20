@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/context/theme-context';
 import { AuthProvider } from '@/auth/auth-context';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { HelpChatbot } from '@/components/layout/HelpChatbot';
 
 export const metadata: Metadata = {
   title: 'SkillLab | AI Mock Interview Platform',
@@ -50,9 +51,11 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-1 flex flex-col">{children}</main>
             <Footer />
+            <HelpChatbot />
           </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+

@@ -2,11 +2,26 @@ export type InterviewPhase = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 export type InterviewMode = 'text' | 'voice';
 
+export type AnswerStatus =
+  | 'answered_correctly'
+  | 'partially_correct'
+  | 'incorrect'
+  | 'unanswered'
+  | 'irrelevant';
+
 export interface TurnEvaluation {
+  answerStatus: AnswerStatus;
+  relevanceScore: number;
+  correctnessScore: number;
+  technicalScore: number;
+  communicationScore: number;
   clarityScore: number;
   technicalDepthScore: number;
   feedback: string;
+  followUpRequired?: boolean;
+  detectedIntent?: string;
 }
+
 
 export interface InterviewTurn {
   id: string;

@@ -9,6 +9,8 @@ import {
   AnswerRecord,
   ScoreRecord,
   EvaluationReport,
+  AptitudeAttemptRecord,
+  CodingAttemptRecord,
 } from '@/types/workflow.types';
 import { InterviewTurn } from '@/types/interview-chat.types';
 
@@ -19,7 +21,10 @@ const STORAGE_KEYS = {
   SCORES: 'skilllab_scores_v1',
   EVALUATIONS: 'skilllab_evaluations_v1',
   INTERVIEW_TURNS: 'skilllab_interview_turns_v1',
+  APTITUDE_ATTEMPTS: 'skilllab_aptitude_attempts_v1',
+  CODING_ATTEMPTS: 'skilllab_coding_attempts_v1',
 };
+
 
 // Local storage helpers for offline/demo resilience
 function getLocalStorageMap<T>(key: string): Record<string, T> {
@@ -370,4 +375,85 @@ export class WorkflowRepository {
 
     return { allowed: true };
   }
+
+  /**
+   * Save a completed aptitude assessment attempt
+   */
+  static async saveAptitudeAttempt(attempt: AptitudeAttemptRecord): Promise<void> {
+    setLocalStorageItem(STORAGE_KEYS.APTITUDE_ATTEMPTS, attempt.id, attempt);
+    if (isFirebaseConfigured && db) {
+      try {
+        await setDoc(doc(db, 'aptitude_attempts', attempt.id), attempt);
+      } catch (e) {
+        console.warn('Firestore aptitude attempt save fallback', e);
+      }
+    }
+  }
+
+  /**
+   * Get all aptitude assessment attempts for a user or session
+   */
+  static async getAptitudeAttempts(userId?: string, streamId?: string): Promise<AptitudeAttemptRecord[]> {
+    const map = getLocalStorageMap<AptitudeAttemptRecord>(STORAGE_KEYS.APTITUDE_ATTEMPTS);
+    let attempts = Object.values(map);
+    if (userId) {
+      attempts = attempts.filter((a) => a.userId === userId);
+    }
+    if (streamId) {
+      attempts = attempts.filter((a) => a.streamId === streamId);
+    }
+    return attempts.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+  }
+
+  /**
+   * Get latest aptitude attempt for a session
+   */
+  static async getLatestAptitudeAttempt(sessionId: string): Promise<AptitudeAttemptRecord | null> {
+    const map = getLocalStorageMap<AptitudeAttemptRecord>(STORAGE_KEYS.APTITUDE_ATTEMPTS);
+    const matches = Object.values(map)
+      .filter((a) => a.sessionId === sessionId)
+      .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+    return matches[0] || null;
+  }
+
+  /**
+   * Save a completed coding assessment attempt
+   */
+  static async saveCodingAttempt(attempt: CodingAttemptRecord): Promise<void> {
+    setLocalStorageItem(STORAGE_KEYS.CODING_ATTEMPTS, attempt.id, attempt);
+    if (isFirebaseConfigured && db) {
+      try {
+        await setDoc(doc(db, 'coding_attempts', attempt.id), attempt);
+      } catch (e) {
+        console.warn('Firestore coding attempt save fallback', e);
+      }
+    }
+  }
+
+  /**
+   * Get all coding assessment attempts for a user or stream
+   */
+  static async getCodingAttempts(userId?: string, streamId?: string): Promise<CodingAttemptRecord[]> {
+    const map = getLocalStorageMap<CodingAttemptRecord>(STORAGE_KEYS.CODING_ATTEMPTS);
+    let attempts = Object.values(map);
+    if (userId) {
+      attempts = attempts.filter((a) => a.userId === userId);
+    }
+    if (streamId) {
+      attempts = attempts.filter((a) => a.streamId === streamId);
+    }
+    return attempts.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+  }
+
+  /**
+   * Get latest coding attempt for a session
+   */
+  static async getLatestCodingAttempt(sessionId: string): Promise<CodingAttemptRecord | null> {
+    const map = getLocalStorageMap<CodingAttemptRecord>(STORAGE_KEYS.CODING_ATTEMPTS);
+    const matches = Object.values(map)
+      .filter((a) => a.sessionId === sessionId)
+      .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+    return matches[0] || null;
+  }
 }
+

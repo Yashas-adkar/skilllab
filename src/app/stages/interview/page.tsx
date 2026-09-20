@@ -21,11 +21,13 @@ import {
   AlertCircle,
   ArrowRight,
   Volume2,
-  VolumeX,
   Sparkles,
   MessageSquare,
   Loader2,
-  RefreshCw,
+  Check,
+  X,
+  AlertTriangle,
+  HelpCircle,
 } from 'lucide-react';
 import {
   InterviewPhase,
@@ -191,7 +193,7 @@ export default function MockInterviewStagePage() {
     });
   }, [session, stream.id, profile, speakText]);
 
-  // Handle Voice Input
+  // Handle Voice Input (STT)
   const toggleListening = () => {
     const stt = SpeechServiceFactory.getSTTService();
 
@@ -212,6 +214,119 @@ export default function MockInterviewStagePage() {
     }
   };
 
+  // Conclude interview and compute actual structured evaluation report
+  const completeInterviewWithReport = useCallback(async () => {
+    if (!session || !user) return;
+    setIsConcluding(true);
+
+    // Compute evaluation metrics from actual candidate turns
+    const candidateTurns = messages.filter((m) => m.sender === 'candidate' && m.evaluation);
+
+    let totalTech = 0;
+    let totalComm = 0;
+    let totalCorrect = 0;
+    let answeredCorrectCount = 0;
+    let partiallyCorrectCount = 0;
+    let unansweredCount = 0;
+    let incorrectCount = 0;
+
+    const evaluatedWeaknesses: string[] = [];
+    const evaluatedStrengths: string[] = [];
+
+    candidateTurns.forEach((t) => {
+      const ev = t.evaluation!;
+      totalTech += ev.technicalScore || 0;
+      totalComm += ev.communicationScore || 0;
+      totalCorrect += ev.correctnessScore || 0;
+
+      if (ev.answerStatus === 'answered_correctly') {
+        answeredCorrectCount++;
+        evaluatedStrengths.push(ev.feedback);
+      } else if (ev.answerStatus === 'partially_correct') {
+        partiallyCorrectCount++;
+      } else if (ev.answerStatus === 'unanswered') {
+        unansweredCount++;
+        evaluatedWeaknesses.push(ev.feedback);
+      } else {
+        incorrectCount++;
+        evaluatedWeaknesses.push(ev.feedback);
+      }
+    });
+
+    const evaluatedCount = Math.max(1, candidateTurns.length);
+    const avgTech = Math.round(totalTech / evaluatedCount);
+    const avgComm = Math.round(totalComm / evaluatedCount);
+    const avgCorrect = Math.round(totalCorrect / evaluatedCount);
+
+    // Dynamic calculated interview score based on performance
+    const computedInterviewScore =
+      candidateTurns.length > 0
+        ? Math.max(25, Math.min(98, Math.round(avgTech * 0.45 + avgComm * 0.25 + avgCorrect * 0.3)))
+        : 75;
+
+    // Deduct penalties for unanswered questions
+    const finalInterviewScore = Math.max(20, computedInterviewScore - unansweredCount * 6);
+
+    const isPassed = finalInterviewScore >= 60;
+    await completeStage('interview', finalInterviewScore, isPassed ? 'passed' : 'needs_improvement');
+
+    // Build strengths list
+    const strengths = [
+      ...evaluatedStrengths.slice(0, 2),
+      'Structured technical communication and ability to navigate engineering interview phases.',
+      `Foundational competencies aligned with ${stream.shortName} standards.`,
+    ].slice(0, 3);
+
+    // Build weaknesses list
+    const weaknesses = [
+      ...evaluatedWeaknesses.slice(0, 2),
+      unansweredCount > 0
+        ? `${unansweredCount} technical question(s) were unattempted during the round.`
+        : 'Deepen edge case handling under extreme scale and concurrency bottlenecks.',
+      'Provide more concrete metrics and benchmark numbers when discussing technical tradeoffs.',
+    ].slice(0, 3);
+
+    // Recommendations
+    const recommendations = [
+      `Review core principles and system design patterns for ${stream.shortName}.`,
+      unansweredCount > 0
+        ? 'Practice formulating partial hypotheses even on unfamiliar questions rather than skipping.'
+        : 'Articulate architectural tradeoffs using quantitative latency and throughput figures.',
+      'Prepare 2-minute structured STAR framework responses for behavioral leadership discussions.',
+    ];
+
+    const aptitudeScore = stageProgress?.aptitude?.score ?? 75;
+    const codingScore = stageProgress?.coding?.score ?? 85;
+    const resumeScore = stageProgress?.resume?.score ?? 80;
+
+    const overallScore = Math.round(
+      resumeScore * 0.2 + aptitudeScore * 0.25 + codingScore * 0.3 + finalInterviewScore * 0.25
+    );
+
+    const evaluationReport: EvaluationReport = {
+      id: `eval_${session.id}`,
+      sessionId: session.id,
+      userId: user.uid,
+      streamId: stream.id,
+      overallScore,
+      preparationPercentage: 100,
+      stageScores: {
+        resume: resumeScore,
+        aptitude: aptitudeScore,
+        coding: codingScore,
+        interview: finalInterviewScore,
+      },
+      strengths,
+      weaknesses,
+      recommendations,
+      createdAt: new Date().toISOString(),
+    };
+
+    await WorkflowRepository.saveEvaluation(evaluationReport);
+    setIsConcluding(false);
+    router.push('/stages/evaluation');
+  }, [session, user, messages, stream.id, stream.shortName, stageProgress, completeStage, router]);
+
   // Send candidate answer and receive next question
   const handleSendMessage = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -226,8 +341,9 @@ export default function MockInterviewStagePage() {
     const answerText = inputText.trim();
     setInputText('');
 
+    const userMsgId = `usr_${Date.now()}`;
     const userMsg: Message = {
-      id: `usr_${Date.now()}`,
+      id: userMsgId,
       sender: 'candidate',
       text: answerText,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -246,12 +362,24 @@ export default function MockInterviewStagePage() {
           userMessage: answerText,
           currentPhase,
           profile,
-          history: messages.map((m) => ({ sender: m.sender, text: m.text })),
+          history: messages.map((m) => ({
+            sender: m.sender,
+            text: m.text,
+            evaluation: m.evaluation,
+          })),
         }),
       });
 
       if (res.ok) {
         const data = await res.json();
+
+        // Update the candidate's message with evaluation data from server analysis
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === userMsgId ? { ...m, evaluation: data.evaluation } : m
+          )
+        );
+
         const aiMsg: Message = {
           id: `ai_${Date.now()}`,
           sender: 'ai',
@@ -259,7 +387,6 @@ export default function MockInterviewStagePage() {
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           phase: data.currentPhase,
           phaseName: data.phaseName,
-          evaluation: data.evaluation,
         };
 
         setMessages((prev) => [...prev, aiMsg]);
@@ -267,8 +394,9 @@ export default function MockInterviewStagePage() {
         speakText(data.reply);
 
         if (data.isConcluded) {
-          // If 8 phases reached
-          completeInterviewWithReport();
+          setTimeout(() => {
+            completeInterviewWithReport();
+          }, 1200);
         }
       }
     } catch (err) {
@@ -276,50 +404,6 @@ export default function MockInterviewStagePage() {
     } finally {
       setIsAiResponding(false);
     }
-  };
-
-  // Conclude interview and compute final score
-  const completeInterviewWithReport = async () => {
-    if (!session || !user) return;
-    setIsConcluding(true);
-
-    const interviewScore = 88;
-    await completeStage('interview', interviewScore, 'passed');
-
-    // Create & save final evaluation
-    const evaluationReport: EvaluationReport = {
-      id: `eval_${session.id}`,
-      sessionId: session.id,
-      userId: user.uid,
-      streamId: stream.id,
-      overallScore: 86,
-      preparationPercentage: 100,
-      stageScores: {
-        resume: 84,
-        aptitude: 75,
-        coding: 90,
-        interview: interviewScore,
-      },
-      strengths: [
-        'Strong algorithmic problem solving and time-complexity optimization.',
-        'High technical fluency articulating distributed caching, rate-limiting, and concurrency tradeoffs.',
-        'Structured communication with clear engineering problem-solving frameworks.',
-      ],
-      weaknesses: [
-        'Aptitude question speed on quantitative permutations was slightly below benchmark.',
-        'Resume could emphasize quantified latency and scale metrics more prominently.',
-      ],
-      recommendations: [
-        'Review multi-region distributed consensus algorithms (Raft, Paxos) for senior system design rounds.',
-        'Practice 15-minute speed drills on probability and combinatorics aptitude.',
-        'Incorporate quantifiable achievements in the resume project impact sections.',
-      ],
-      createdAt: new Date().toISOString(),
-    };
-
-    await WorkflowRepository.saveEvaluation(evaluationReport);
-    setIsConcluding(false);
-    router.push('/stages/evaluation');
   };
 
   const latestAiMessage = [...messages].reverse().find((m) => m.sender === 'ai');
@@ -355,7 +439,7 @@ export default function MockInterviewStagePage() {
           currentStageId="interview"
           stageNumber={4}
           stageTitle="AI Mock Interview"
-          stageSubtitle="Interactive technical & behavioral round with real-time AI evaluation"
+          stageSubtitle="Interactive technical & behavioral round with deep answer analysis"
           streamName={stream.shortName}
           status={currentProgress?.status || 'not_started'}
           score={currentProgress?.score}
@@ -379,7 +463,7 @@ export default function MockInterviewStagePage() {
               <div>
                 <div className="flex items-center gap-2">
                   <h2 className="text-sm font-bold text-slate-900 dark:text-white">Dr. Elena Vance</h2>
-                  <Badge variant="blue" size="sm">AI Principal Evaluator</Badge>
+                  <Badge variant="blue" size="sm">AI Technical Evaluator</Badge>
                 </div>
                 <p className="text-xs text-slate-600 dark:text-slate-400">
                   {stream.name} • {profile?.profileInformation?.headline || stream.shortName}
@@ -431,7 +515,7 @@ export default function MockInterviewStagePage() {
                 isLoading={isConcluding}
                 rightIcon={<CheckCircle2 className="w-3.5 h-3.5" />}
               >
-                End Interview
+                End & Evaluate
               </Button>
             </div>
           </div>
@@ -442,7 +526,9 @@ export default function MockInterviewStagePage() {
               <span className="font-semibold text-indigo-700 dark:text-indigo-300">
                 Phase {currentPhase} of 8: {INTERVIEW_PHASE_NAMES[currentPhase]}
               </span>
-              <span className="text-slate-500 dark:text-slate-400">{Math.round((currentPhase / 8) * 100)}% complete</span>
+              <span className="text-slate-500 dark:text-slate-400">
+                {Math.round((currentPhase / 8) * 100)}% complete
+              </span>
             </div>
             <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
               <div
@@ -461,7 +547,7 @@ export default function MockInterviewStagePage() {
                 </div>
                 <div className="space-y-1 text-xs sm:text-sm">
                   <span className="font-bold text-indigo-700 dark:text-indigo-300 uppercase tracking-wider text-[10px]">
-                    Active Interview Prompt • {latestAiMessage.phaseName || `Phase ${currentPhase}`}
+                    Current Interview Question • {latestAiMessage.phaseName || `Phase ${currentPhase}`}
                   </span>
                   <p className="text-slate-900 dark:text-white font-medium leading-relaxed">
                     {latestAiMessage.text}
@@ -485,6 +571,8 @@ export default function MockInterviewStagePage() {
             <div className="flex-1 space-y-4 overflow-y-auto max-h-[420px] pr-2">
               {messages.map((m) => {
                 const isAi = m.sender === 'ai';
+                const ev = m.evaluation;
+
                 return (
                   <div
                     key={m.id}
@@ -510,17 +598,44 @@ export default function MockInterviewStagePage() {
                         <span>{m.timestamp}</span>
                       </div>
 
-                      <p>{m.text}</p>
+                      <p className="whitespace-pre-wrap">{m.text}</p>
 
-                      {/* Evaluation Pill if turn was evaluated */}
-                      {m.evaluation && (
-                        <div className="pt-2 mt-2 border-t border-slate-200 dark:border-indigo-500/30 text-[11px] flex items-center gap-3">
-                          <span className="text-emerald-700 dark:text-emerald-300">
-                            Depth: <strong>{m.evaluation.technicalDepthScore}%</strong>
-                          </span>
-                          <span className="text-cyan-700 dark:text-cyan-200">
-                            Clarity: <strong>{m.evaluation.clarityScore}%</strong>
-                          </span>
+                      {/* Evaluation Badge and Metrics if evaluated by AI Analyzer */}
+                      {ev && (
+                        <div className="pt-2 mt-2 border-t border-indigo-500/40 text-[11px] space-y-1.5">
+                          <div className="flex flex-wrap items-center gap-2">
+                            {ev.answerStatus === 'answered_correctly' && (
+                              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 font-bold flex items-center gap-1">
+                                <Check className="w-3 h-3" /> Answer Analyzed: Correct & Substantive
+                              </span>
+                            )}
+                            {ev.answerStatus === 'partially_correct' && (
+                              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-200 font-bold flex items-center gap-1">
+                                <AlertTriangle className="w-3 h-3" /> Answer Analyzed: Partially Correct
+                              </span>
+                            )}
+                            {ev.answerStatus === 'unanswered' && (
+                              <span className="px-2 py-0.5 rounded-full bg-slate-700/80 text-slate-200 font-bold flex items-center gap-1">
+                                <HelpCircle className="w-3 h-3" /> Answer Analyzed: Unanswered
+                              </span>
+                            )}
+                            {ev.answerStatus === 'incorrect' && (
+                              <span className="px-2 py-0.5 rounded-full bg-rose-500/30 text-rose-200 font-bold flex items-center gap-1">
+                                <X className="w-3 h-3" /> Answer Analyzed: Needs Improvement
+                              </span>
+                            )}
+                            {ev.answerStatus === 'irrelevant' && (
+                              <span className="px-2 py-0.5 rounded-full bg-rose-500/30 text-rose-200 font-bold flex items-center gap-1">
+                                <AlertCircle className="w-3 h-3" /> Answer Analyzed: Off-Topic
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-3 opacity-90 text-[10px]">
+                            <span>Technical: {ev.technicalScore}%</span>
+                            <span>Communication: {ev.communicationScore}%</span>
+                            <span>Relevance: {ev.relevanceScore}%</span>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -541,7 +656,7 @@ export default function MockInterviewStagePage() {
                   </div>
                   <div className="p-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-slate-700 dark:text-slate-300 flex items-center gap-2">
                     <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-600 dark:text-indigo-400" />
-                    <span>Dr. Elena Vance is evaluating your response and preparing the next question...</span>
+                    <span>Dr. Elena Vance is analyzing your answer and preparing the next question...</span>
                   </div>
                 </div>
               )}
@@ -576,8 +691,8 @@ export default function MockInterviewStagePage() {
                 disabled={isAiResponding}
                 placeholder={
                   isListening
-                    ? 'Listening... speech is transcribing to text automatically...'
-                    : 'Type your technical answer here and press Enter...'
+                    ? 'Listening... speaking will transcribe your answer here...'
+                    : 'Type your answer or speak using the microphone...'
                 }
                 className="flex-1 bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-xl px-4 py-3 text-sm outline-none transition-all disabled:opacity-50"
               />
@@ -591,7 +706,7 @@ export default function MockInterviewStagePage() {
                 isLoading={isAiResponding}
                 leftIcon={<Send className="w-4 h-4" />}
               >
-                Send
+                Send Answer
               </Button>
             </form>
           </Card>
